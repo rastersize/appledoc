@@ -1,0 +1,257 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />		
+	<title>appledoc</title>
+	<link rel="stylesheet" type="text/css" media="screen" href="styles.css"  />
+</head>
+
+<body>
+	<article id="contents" role="main">
+		<div id="header">
+			<div id="download">
+			  <a href="http://github.com/tomaz/appledoc/zipball/master">
+			    <img width="90" src="http://github.com/images/modules/download/zip.png"></a>
+			  <a href="http://github.com/tomaz/appledoc/tarball/master">
+			    <img width="90" src="http://github.com/images/modules/download/tar.png"></a>
+			</div>
+			<a href="http://github.com/tomaz/appledoc"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+			<h1>appledoc</h1>
+			<p>Objective-C documentation set generator.</p>
+		</div>
+		<div id="container">
+			<h2>General comment rules</h2>
+			
+			<h3>Multiple line comments</h3>
+			<p>appledoc only handles multiple line comments if they start with slash and double star and end with standard star and slash:
+<pre>/** Some comment */</pre> Lines may optionally start with whitespace and a single star char, like this:
+<pre>/** Star prefixed comment
+ * spreading over multiple
+ * lines
+ */</pre> In such case, the prefix star is automatically discarded.</p>
+			
+			<h3>Single line comments</h3>			
+			<p>appledoc also handles single line comments that start with three slashes. Two or more single line comments found in consequtive lines are grouped together into a single comment.
+<pre>/// Single line comment spreading
+/// over multiple lines</pre><p>
+
+			<h3>Common comment rules</h3>
+			<p>Any comment may optionally include delimiter lines. A delimiter line is any combination of 3 or more chars from the following set: "<code>!@#$%^&*()_=+`~,<.>/?;:'\"-</code>". Such lines are ignored:
+<pre>/// ---------------------------------
+/// comment
+/// ---------------------------------
+</pre></p>
+
+			
+			
+			<h2>Formatting text</h2>
+			<p>appledoc has been designed to keep comments in source code as readable as possible. In order to achieve this, it uses <a href="http://daringfireball.net/projects/markdown/">Markdown</a>-like syntax and extract as much information from the comment surrounding context.</p>
+
+
+			<h3>Emphasis</h3>
+			<p>Text can be emphasized with the following syntax:
+			<ul>
+				<li>Text wrapped within stars (<code>*text*</code>) becomes strong: <strong>text</strong>.</li>
+				<li>Text wrapped within underscodes (<code>_text_</code>) becomes emphasized: <em>text</em>.</li>
+			</ul>
+			You can include the marker itself in the middle of the text, so this <code>*some * text*</code> is converted to: <strong>some * text</strong>. You can nest strong and emphasized formatting directives, so <code>_*text*_</code> or <code>*_text_*</code> becomes emphasized strong text like this: <em><strong>text</strong></em>.</p>
+			
+			
+			<h3>Code spans</h3>
+			<p>As you're documenting source code, chance is you might want to format text as code. Any text wrapped within backtick quotes (<code>`text`</code>) is converted into code span: <code>text</code>. Note that you can't nest emphasis with code!</p>
+
+
+			<h2>Links and cross references</h2>
+			
+			<h3>Links to web pages and other URLs</h3>
+			<p>Any valid URL address starting with <code>http://</code>, <code>https://</code>, <code>ftp://</code>, <code>file://</code> or <code>mailto:</code> is automatically converted to a link in generated HTML. Any type of link - URL or cross references described below - can optionally be embedded within less than and greater than symbols like this: <code>&lt;http://gentlebytes.com&gt;</code>.</p>
+			
+			
+			<h3>Links to classes, categories and protocols</h3>
+			<p>Any word that matches known class, category or protocol name is automatically converted to cross reference link to that object. Assuming complete documentation contains class GBClass, it's extension GBClass(), NSError(GBError) extension and protocol GBProtocol, the following text will automatically convert text:
+<pre>This text contains links to:
+class GBClass, it's extension GBClass(), 
+category NSError(GBError) and 
+protocol GBProtocol.</pre>
+			Into something like:
+			<div class="marker">This text contains links to: class <a href="#">GBClass</a>, it's extension <a href="#">GBClass()</a>, category <a href="#">NSError(GBError)</a> and protocol <a href="#">GBProtocol</a>.</div></p>
+			
+			
+			<h3>Links to local members</h3>			
+			<p>Any word that matches method or property selector name of "current" class, category or protocol is automatically converted to cross reference link to that member. Assuming current object contains method runWithValue:afterDelay and property value, the following text:
+<pre>This text contains links to:
+method runWithValue:afterDelay: and
+property value.</pre>
+			will automatically convert to something like:
+			<div class="marker">This text contains links to: method <a href="#">runWithValue:afterDelay:</a> and <a href="#">property</a> value.</div></p>
+			
+			
+			<h3>Links to remote members</h3>
+			<p>In fact, the only time you need to specifically mark text as a link is to create cross reference to methods or properties of another object (i.e. remote object). Assuming complete documentation contains class GBClass which has method runWithValue:afterDelay: and property value, the following text:
+<pre>This text contains links to:
+method [GBClass runWithValue:afterDelay] and
+property [GBClass value]</pre>
+			Will convert to something like:
+			<div class="marker">This text contains links to: method <a href="#">[GBClass runWithValue:afterDelay]</a> and property <a href="#">[GBClass value]</a></div></p>			
+
+
+
+			<h2>Paragraphs</h2>
+			<p>Text is grouped together into paragraphs. A paragraph is simply any number of consecutive lines of text, separated by one or more empty lines:
+<pre>First paragraph.
+
+Second paragraph with lot's of
+text spread accross multiple lines.
+
+And another paragraph.</pre>
+			Paragraph may contain normal or emphasized text, code spans, links or cross references. Additionally, paragraphs may include blocks: ordered or unordered lists, specially formatted blocks of text and example blocks. Although these items are separated from preceeding paragraph by an empty line, they are considered part of the paragraph!</p>
+			<p>The first paragraph of each comment is automatically used as short description for the element the comment is describing.</p>
+			 
+			 
+			 <h3>Unordered lists</h3>
+			 <p>Unordered lists use -, + or * markers in front of each item:
+<pre>- First item.
+- Second item with lot's of text
+  spread across multiple lines.
+- Third item.</pre>
+			Each list item's description is parsed as a paragraph, so all paragraph rules apply. If the list is preceeded by another paragraph, an empty line must be inserted and if followed by another paragraph, it must also be delimited by an empty line:
+<pre>Some paragraph.
+
+- First item.
+- Second item.
+
+A different paragraph.</pre>
+			This code creates two paragraphs: first one with text "Some paragraph." and given list and second paragraph with text "A different paragraph." If you want to create to separate consequtive lists, delimit them with an empty line like this:
+<pre>- First list first item.
+- First list second item.
+
+- Second list first item.
+- Second list second item.</pre>
+			You can nest lists by prefixing them with tabs like this:
+<pre>- Item 1
+	- Item 1.1
+	- Item 1.2
+		- Item 1.2.1
+	- Item 1.3
+- Item 2</pre>
+			You can combine ordered and unordered lists when nesting.</p>
+			
+			
+			<h3>Ordered lists</h3>
+			<p>Ordered lists use a number followed by a dot as a marker in front of each item:
+<pre>1. First item
+2. Second item</pre>
+			Numbers don't need to be consequtive, you can even use the same number for all items; appledoc will simply number the items by their order. All rules for unordered lists also apply for ordered lists: separation with empty lines, nesting etc., so it won't be repeated here.</p>
+			
+			
+			<h3>Important information</h3>
+			<p>You mark a paragraph as important with <code>@warning</code> directive. It expects a standard paragraph for the description. For example, this is how you can acchieve effect Apple uses for such blocks:
+<pre>@warning *Important:* Sending this message before `readValues:fromFile:`
+    will result in unpredicted results, most likely as runtime exception!</pre>
+    		As you can see, you can spread the description into multiple lines but any empty line will start a new paragraph.</p>
+    		
+    		
+    		<h3>Bug information</h3>
+    		<p>If you'd like to make a paragraph even more emphasized than a @warning, you can use <code>@bug</code> directive. It works just like @warning, so see description there for details.</p>
+    		
+    		
+    		
+    		<h2>Methods and properties description</h2>
+    		<p>
+    		<ul>
+				<li><code>@return &lt;description&gt;</code>: Provides the description of method or property result. The description may be composed of a single paragraph as described above.</li>
+				<li><code>@param &lt;name&gt; &lt;description&gt;</code>: Provides the description of method parameter with the given name. You need to provide description for each parameter or appledoc will log a warning. The description may be composed of a single paragraph as described above.</li>
+				<li><code>@exception &lt;name&gt; &lt;description&gt;</code>: Provides the description of an exception that may be raised by a method. The name of the exception is given with the first parameter. The description may be composed of a single paragraph as described above.</li>
+    		</ul>
+    		</p>
+    		
+    		
+    		
+    		<h2>Miscellaneous</h2>
+    		<p>
+    		<ul>
+    			<li><code>@see &lt;name&gt;</code> or <code>@sa &lt;name&gt;</code>: See also (cross reference) link. Although you can provide cross reference links anywhere within the paragraph text, as described above, you need to use these directives to provide related context links for documentation set. The name should follow cross reference guidelines described above.</li>
+    			<li><code>@name &lt;title&gt;</code>: The title of the methods and/or properties group. All methods and properties declared after @name directive will be stored into a group with the given title. These groups are then extracted as tasks.</li>
+    		</ul>
+    		</p>
+    		
+    		
+    		<h2>Examples</h2>
+    		<p>An example of hypothetical class that handles writting and reading strings to and from files:
+<pre>/** This is a short description of the class.
+
+Long description of the class. Lorem ipsum dolor sit amet, consectetur 
+adipiscing elit. Quisque vel tortor eget mauris blandit semper a et 
+massa. Integer facilisis dignissim ornare. Duis erat erat, vestibulum 
+sit amet molestie a, vulputate et ipsum. Vivamus rhoncus tortor vel 
+sapien luctus varius. 
+
+@see NSString(GBReadWriteExtensions)
+*/
+@interface GBStringReader
+
+///-----------------------------------
+/// @name Reading & writting handling
+///-----------------------------------
+
+/** Reads the given string from the file with the given name.
+
+@param filename The name of the file.
+@return Returns string contents of the file or `nil` if reading fails.
+@see writeString:toFile:
+@see lastString
+@see lastFilename
+*/
+- (NSString *)readStringFromFile:(NSString *)filename;
+
+/** Writes the given string to the file with the given name.
+
+@param string The string to write to file.
+@param filename The name of the file.
+@return Returns `YES` on success, `NO` otherwise.
+@exception NSException Thrown if any parameter is `nil`.
+@see readStringFromFile:
+@see lastString
+@see lastFilename
+*/
+- (BOOL)writeString:(NSString *)string toFile:(NSString *)filename;
+
+///----------------------------
+/// @name Information handling
+///----------------------------
+
+/** Returns the last read or written string. */
+@property (readonly) NSString *lastString;
+
+/** Returns the last name of the file read from or written to. */
+@property (readonly) NSString *lastFilename;
+
+@end</pre>
+			The methods could also have longer descriptions, but I kept the example deliberatly short to make it more readable. You can see more examples within appledoc source code itself on <a href="http://github.com/tomaz/appledoc">GitHub</a>.</p>
+		</div>
+		<div id="aside">
+			<h2>Contents</h2>
+			<p>
+			<ul>
+				<li><a href="index.html">About</a></li>
+				<li><a href="comments.html">Comments</a></li>
+			</ul>
+			</p>
+		</div>
+		<div id="footer">
+			&copy; 2009-2010 <a href="http://gentlebytes.com">Gentle Bytes</a>. All rights reserved.
+		</div>
+	</article>
+	<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("UA-11836532-1");
+	pageTracker._trackPageview();
+	} catch(err) {}</script>
+</body>
+
+</html>
