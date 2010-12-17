@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />		
+	<title>appledoc @ GitHub</title>
+	<link rel="stylesheet" type="text/css" media="screen" href="styles.css"  />
+</head>
+
+<body>
+	<article id="contents" role="main">
+		<div id="header">
+			<div id="download">
+			  <a href="http://github.com/tomaz/appledoc/zipball/master">
+			    <img width="90" src="http://github.com/images/modules/download/zip.png"></a>
+			  <a href="http://github.com/tomaz/appledoc/tarball/master">
+			    <img width="90" src="http://github.com/images/modules/download/tar.png"></a>
+			</div>
+			<a href="http://github.com/tomaz/appledoc"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+			<h1>appledoc</h1>
+			<p>Objective-C documentation set generator.</p>
+		</div>
+		<div id="container">
+			<h2>Settings and parameters</h2>
+			<p>appledoc has been designed to keep the command line as simple as possible. On the other hand, it offers many command line swithces as parameters for you to refine generated output. However only a handful of these parameters are unique from project to project, most of them are common to many projects - company name, documentation set information, etc. To strike the balance, appledoc uses sensible defaults plus it allows you specify common parameters as global settings. In fact, there are three layers of settings:
+			<ul>
+				<li>Factory defaults: These are "hard-wired" into appledoc code and are designed to be as reusable as possible.</li>
+				<li>Global settings: Some of the defaults cannot be pre-configured, but are ussually common to many of the projects; company name for example. Global settings override factory defaults.</li>
+				<li>Command line arguments: You can override factory defaults and global settings through command line arguments.</li>
+			</ul>
+			You can change all parameters provided by appledoc through any of the above mentioned layers. To discover what settings are available, use: <pre>appledoc --help</pre> Note that all boolean switches can be prefixed with <code>--no-</code> string to opt them out. This is especially useful to disable factory default or global setting. For example: to enable doc set installation, you would use <code>--install-docset</code>, and to disable it: <code>--no-install-docset</code>.
+			<p>
+			
+			
+			<h2>Global settings</h2>
+			<p>Global settings are configured through a standard plist file. The path of the global settings file is specified through <code>--templates</code> command line switch - the same switch is used for giving the path to the template files used for generating output (HTML and CSS files for example). So global settings file is located at the same path as template files. As it would be tedious to specify this path for every run, appledoc uses two predefined paths for locating these files:
+			<ul>
+				<li>~/Library/Application Support/appledoc</li>
+				<li>~/.appledoc</li>
+			</ul>
+			The paths are searched in the given order - if both exist, the first one will be used. If none of these paths exist, or you want to specify another path, you must use <code>--templates</code> command line argument. If a file with a name <code>GlobalSettings.plist</code> exists in the template path used (either one of the predefined paths or the path from command line), it is loaded and any valid settings found are used for overriding factory defaults.</p>
+			<p>Global settings use exactly the same arguments as command line, so you don't have to remember another set of keys! Use <code>appledoc --help</code> to see the list of all possible keys. However due to the way plists work, there are few simple rules:
+			<ul>
+				<li>Settings that can be passed multiple times (<code>--ignore</code> for example) should be specified as an array under a single key with the name of the settings.</li>
+				<li>Boolean settings should be given in their "normal" form and their value specified with either true or false value (i.e. there's no need to use <code>--no-</code> prefix).</li>
+				<li>All other settings should be strings or numbers - depending the value, check <code>appledoc --help</code> for details.</li>
+			</ul>
+			An example of the plist file:
+<pre>&lt;?xml version="1.0" encoding="UTF-8"&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" 
+	"http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+	&lt;key>--ignore&lt;/key&gt;
+	&lt;array&gt;
+		&lt;string>ThirdParty&lt;/string&gt;
+		&lt;string>Libraries&lt;/string&gt;
+		&lt;string>Frameworks&lt;/string&gt;
+		&lt;string>Testing&lt;/string&gt;
+	&lt;/array&gt;
+	&lt;key>--project-company&lt;/key&gt;
+	&lt;string>Gentle Bytes&lt;/string&gt;
+	&lt;key>--company-id&lt;/key&gt;
+	&lt;string>com.gentlebytes&lt;/string&gt;
+	&lt;key>--create-docset&lt;/key&gt;
+	&lt;true/&gt;
+	&lt;key>--install-docset&lt;/key&gt;
+	&lt;false/&gt;
+	&lt;key>--verbose&lt;/key&gt;
+	&lt;integer>4&lt;/integer&gt;
+	&lt;key>--logformat&lt;/key&gt;
+	&lt;integer>1&lt;/integer&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;</pre>
+			</p>
+			
+			
+			<h2>Settings placeholder strings</h2>
+			<p>To avoid repetition and simplify command line interface even further, many settings allow you to specify placeholder strings that are replaced with actual settings values. Available placeholders are:
+			<ul>
+				<li><code>$PROJECT</code>: Replaced with the value of <code>--project-name</code>.</li>
+				<li><code>$COMPANY</code>: Replaced with the value of <code>--project-company</code>.</li>
+				<li><code>$COMPANYID</code>: Replaced with the value of <code>--company-id</code>.</li>
+				<li><code>$VERSION</code>: Replaced with the value of <code>--project-version</code>.</li>
+				<li><code>$YEAR</code>: Replaced with current year in format <code>yyyy</code>.</li>
+				<li><code>$UPDATEDATE</code>: Replaced with current date in format <code>yyyy-MM-dd</code>.</li>
+			</ul>
+			All settings that can use these placeholders are marked with <code>appledoc --help</code>.</p>
+		</div>
+		<div id="aside">
+			<h2>Contents</h2>
+			<p>
+			<ul>
+				<li><a href="index.html">About</a></li>
+				<li><a href="comments.html">Comments</a></li>
+				<li><a href="settings.html">Settings</a></li>
+			</ul>
+			</p>
+		</div>
+		<div id="footer">
+			&copy; 2009-2010 <a href="http://gentlebytes.com">Gentle Bytes</a>. All rights reserved.
+		</div>
+	</article>
+	<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("UA-11836532-1");
+	pageTracker._trackPageview();
+	} catch(err) {}</script>
+</body>
+
+</html>
