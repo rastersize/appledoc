@@ -45,10 +45,12 @@
 
 			
 			
+			<a name="formatting"></a>
 			<h2>Formatting text</h2>
 			<p>appledoc has been designed to keep comments in source code as readable as possible. In order to achieve this, it uses <a href="http://daringfireball.net/projects/markdown/">Markdown</a>-like syntax and extract as much information from the comment surrounding context.</p>
 
 
+			<a name="emphasis"></a>
 			<h3>Emphasis</h3>
 			<p>Text can be emphasized with the following syntax:
 			<ul>
@@ -58,16 +60,19 @@
 			You can include the marker itself in the middle of the text, so this <code>*some * text*</code> is converted to: <strong>some * text</strong>. You can nest strong and emphasized formatting directives, so <code>_*text*_</code> or <code>*_text_*</code> becomes emphasized strong text like this: <em><strong>text</strong></em>.</p>
 			
 			
+			<a name="code"></a>
 			<h3>Code spans</h3>
 			<p>As you're documenting source code, chance is you might want to format text as code. Any text wrapped within backtick quotes (<code>`text`</code>) is converted into code span: <code>text</code>. Note that you can't nest emphasis with code!</p>
 
 
 			<h2>Links and cross references</h2>
 			
+			<a name="link-url"></a>
 			<h3>Links to web pages and other URLs</h3>
 			<p>Any valid URL address starting with <code>http://</code>, <code>https://</code>, <code>ftp://</code>, <code>file://</code> or <code>mailto:</code> is automatically converted to a link in generated HTML. Any type of link - URL or cross references described below - can optionally be embedded within less than and greater than symbols like this: <code>&lt;http://gentlebytes.com&gt;</code>.</p>
 			
 			
+			<a name="link-object"></a>
 			<h3>Links to classes, categories and protocols</h3>
 			<p>Any word that matches known class, category or protocol name is automatically converted to cross reference link to that object. Assuming complete documentation contains class GBClass, it's extension GBClass(), NSError(GBError) extension and protocol GBProtocol, the following text will automatically convert text:
 <pre>This text contains links to:
@@ -78,6 +83,7 @@ protocol GBProtocol.</pre>
 			<div class="marker">This text contains links to: class <a href="#">GBClass</a>, it's extension <a href="#">GBClass()</a>, category <a href="#">NSError(GBError)</a> and protocol <a href="#">GBProtocol</a>.</div></p>
 			
 			
+			<a name="link-local-member"></a>
 			<h3>Links to local members</h3>			
 			<p>Any word that matches method or property selector name of "current" class, category or protocol is automatically converted to cross reference link to that member. Assuming current object contains method runWithValue:afterDelay and property value, the following text:
 <pre>This text contains links to:
@@ -87,6 +93,7 @@ property value.</pre>
 			<div class="marker">This text contains links to: method <a href="#">runWithValue:afterDelay:</a> and <a href="#">property</a> value.</div></p>
 			
 			
+			<a name="link-remote-member"></a>
 			<h3>Links to remote members</h3>
 			<p>In fact, the only time you need to specifically mark text as a link is to create cross reference to methods or properties of another object (i.e. remote object). Assuming complete documentation contains class GBClass which has method runWithValue:afterDelay: and property value, the following text:
 <pre>This text contains links to:
@@ -97,6 +104,7 @@ property [GBClass value]</pre>
 
 
 
+			<a name="paragraph"></a>
 			<h2>Paragraphs</h2>
 			<p>Text is grouped together into paragraphs. A paragraph is simply any number of consecutive lines of text, separated by one or more empty lines:
 <pre>First paragraph.
@@ -109,6 +117,7 @@ And another paragraph.</pre>
 			<p>The first paragraph of each comment is automatically used as short description for the element the comment is describing.</p>
 			 
 			 
+			 <a name="unordered-list"></a>
 			 <h3>Unordered lists</h3>
 			 <p>Unordered lists use -, + or * markers in front of each item:
 <pre>- First item.
@@ -138,6 +147,7 @@ A different paragraph.</pre>
 			You can combine ordered and unordered lists when nesting.</p>
 			
 			
+			<a name="ordered-list"></a>
 			<h3>Ordered lists</h3>
 			<p>Ordered lists use a number followed by a dot as a marker in front of each item:
 <pre>1. First item
@@ -145,15 +155,30 @@ A different paragraph.</pre>
 			Numbers don't need to be consequtive, you can even use the same number for all items; appledoc will simply number the items by their order. All rules for unordered lists also apply for ordered lists: separation with empty lines, nesting etc., so it won't be repeated here.</p>
 			
 			
+			<a name="warning"></a>
 			<h3>Important information</h3>
 			<p>You mark a paragraph as important with <code>@warning</code> directive. It expects a standard paragraph for the description. For example, this is how you can acchieve effect Apple uses for such blocks:
 <pre>@warning *Important:* Sending this message before `readValues:fromFile:`
     will result in unpredicted results, most likely as runtime exception!</pre>
     		As you can see, you can spread the description into multiple lines but any empty line will start a new paragraph.</p>
     		
-    		
+
+			<a name="bug"></a>
     		<h3>Bug information</h3>
     		<p>If you'd like to make a paragraph even more emphasized than a @warning, you can use <code>@bug</code> directive. It works just like @warning, so see description there for details.</p>
+    		
+    		
+    		<a name="example"></a>
+    		<h3>Examples and code blocks</h3>
+    		<p>If you want to mark a block of text as an example, simply prefix each line with a tab. appledoc will automatically convert consequtive blocks of tab prefixed lines into a single code block. Similar to lists and other paragraph blocks, example section needs to be delimited from preceeding and following paragraph with an empty line:
+<pre>Normal paragraph text
+
+	First line of example
+	Second line of example
+
+Another paragraph.
+</pre>
+			The first tab is automatically removed from the code block.</p>
     		
     		
     		
