@@ -72,7 +72,7 @@
 	&lt;integer>1&lt;/integer&gt;
 &lt;/dict&gt;
 &lt;/plist&gt;</pre>
-			</p>
+			Most commonly used global settings include <code>--project-company</code>, <code>--company-id</code>, <code>--verbose</code>, <code>--logformat</code> and similar. These are all settings that are ussually constant between the projects and would otherwise require repeating command line swithces on everry run. Of course you can still override them on specific projects if needed!</p>
 			
 			
 			<h2>Settings placeholder strings</h2>
@@ -86,6 +86,80 @@
 				<li><code>$UPDATEDATE</code>: Replaced with current date in format <code>yyyy-MM-dd</code>.</li>
 			</ul>
 			All settings that can use these placeholders are marked in help output by running <code>appledoc --help</code>. This works regardless of whether the setting value came from factory defaults, global setting or command line switch!</p>
+			
+			
+			
+			<h2>Command line examples</h2>
+			<p>Find some examples of command line usage below. Each command line switch is written in it's own line to make the output more readable; switches should be delimited with space normally!</p>
+			
+			<h3>Minimum command line:</h3>
+			<p>
+<pre>appledoc
+--project-name appledoc
+--project-company "Gentle Bytes"
+--company-id com.gentlebytes
+--output ~/help
+.</pre>
+			Parses files from current directory and generates HTML files in the given output path. HTML files are then used to generate documentation set (in given output path) and this is finally moved to shared folder where Xcode searches documentation sets. Xcode is also instructed to reload documentation, so any change is immediately visible.</p>
+			
+			
+			<h3>Inspect generated HTML files</h3>
+			<p>appledoc output generation works in several steps (i.e. generate HTML, generate docset, install docset). Each step output files are used as source for next step. For performance reasons, files are moved instead of copied between these steps. Although this makes appledoc efficient, it may seem strange to see output folder empty when appledoc finishes. If so, just think of --output switch as the path to temporary files used during generation. In most cases these intermediate files are not needed and are removed manually anyway. However there are occasions where you'd want to inspect output; debugging or archiving for example. At present there's no command line switch to instruct appledoc to copy instead of move, but you can prevent it performing certain steps. This automatically leaves files generated in previous step in output path. Most often you'd like to see HTML files:
+<pre>appledoc
+--project-name appledoc
+--project-company "Gentle Bytes"
+--company-id com.gentlebytes
+--output ~/help
+--no-create-docset
+.</pre>
+			By adding <code>--no-create-docset</code> you instruct appledoc to create HTML and then quit. Using this command line, you'll find HTML files in ~/help/html.
+			</p>
+			
+			
+			<h3>Inspect generated documentation set files</h3>
+			<p>If you'd like to inspect documentation set files use --no-install-docset instead:
+<pre>appledoc
+--project-name appledoc
+--project-company "Gentle Bytes"
+--company-id com.gentlebytes
+--output ~/help
+--no-install-docset
+.</pre>
+			Using this command line, you'll find docset files in ~/help/docset. The docset is already indexed but all xml files used for indexing are left (these files are removed from installed docset!).</p>
+			
+			
+			<h3>Ignore paths</h3>
+			<p>You can instruct appledoc to ignore any number of paths or files using --ignore switches. This is useful if your project includes third party source files for example (it's much easier to put these files into a subfolder to simplify ignoring):
+<pre>appledoc
+--project-name appledoc
+--project-company "Gentle Bytes"
+--company-id com.gentlebytes
+--output ~/Projects/Help/appledoc
+--ignore Common
+--ignore .m
+.</pre>
+			Using this command line would effectively ignore all files in ./Common including all subdirectories. Additionally it would ignore all files and directories with extension .m.</p>
+			<p>Each --ignore switch takes a single path that should be ignored while parsing. It works very simply: each directory or file found in the given source paths (. in this case) is checked and if it ends with one of the ignore values, the path is skipped. Or put in other words: <code>[NSString hasSuffix:]</code> is sent to each source file or directory to validate ignored files.</p>
+			<p><strong>Important:</strong> Note that --ignore strings don't accept * and ? chars for unknown chars matching! However if the string starts with a star (*), the star is removed, so <code>--ignore *.m</code> is internally translated to <code>--ignore .m</code> for your convenience. But star in the middle doesn't work, so this <code>--ignore path/subpath/*.m</code> would not ignore all .m files in path/subpath as expected - in fact, it would only match files or directories which names end with path/subpath/*.m!</p>
+			
+			
+			<h3>Undocumented objects and members handling</h3>
+			<p>By default appledoc ignores all undocumented classes, categories, protocols as well as methods and properties. However you can instruct it to include undocumented objects and members in generated HTML:
+<pre>appledoc
+--project-name appledoc
+--project-company "Gentle Bytes"
+--company-id com.gentlebytes
+--output ~/Projects/Help/appledoc
+--keep-undocumented-objects
+--keep-undocumented-members
+--search-undocumented-doc
+.</pre>
+			This command line would include every parsed object (class, category and protocol) and it's member (method or property). Additionally it would search for documentation of undocumented members in super classes and adopted protocols. To better understand how these switched interact with each other this is the workflow used:
+			<ul>
+				<li>If <code>--search-undocumented-doc</code> is enabled, all undocumented methods and properties documentation is searched for in known super class hierarchy. If documentation is found in any of the super classes, it is copied to inherited member as well. If documentation is not found in superclasses, it is searched for in adopted protocols and copied from there if possible. If disabled, members are left undocumented and are handled that way as described below. This option is enabled by default (in fact above example doesn't need to enable it explicitly); to disable, use <code>--no-search-undocumented-doc.</code></li>
+				<li>If <code>--keep-undocumented-members</code> is enabled, all undocumented methods and properties are left and used for output. If disabled, any undocumented method or property is removed from class (of course any documentation copied over from super classes or adopted protocols in previous step is considered valid too). This option is disabled by default.</li>
+				<li>If <code>--keep-undocumented-objects</code> is enabled, all undocumented classes, categories and protocols are left. If disabled, all undocumented objects that have no documented method or property are also removed. However if undocumented object contains documented members, the object is left and used for output regardless of this option (overview section would be ommited in generated HTML)! This option is disabled by default.</li>
+			</ul></p>
 		</div>
 		<div id="aside">
 			<h2>Contents</h2>
