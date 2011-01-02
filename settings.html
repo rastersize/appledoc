@@ -28,7 +28,7 @@
 				<li>Global settings: Some of the defaults cannot be pre-configured, but are ussually common to many of the projects; company name for example. Global settings override factory defaults.</li>
 				<li>Command line arguments: You can override factory defaults and global settings through command line arguments.</li>
 			</ul>
-			You can change all parameters provided by appledoc through any of the above mentioned layers. To discover what settings are available, use: <pre>appledoc --help</pre> Note that all boolean switches can be prefixed with <code>--no-</code> string to opt them out. This is especially useful to disable factory default or global setting. For example: to enable doc set installation, you would use <code>--install-docset</code>, and to disable it: <code>--no-install-docset</code>.
+			You can change all parameters provided by appledoc through any of the above mentioned layers. To discover what settings are available, use: <pre>appledoc --help</pre> Most switches require a parameter of certain type as indicated in help output. Boolean switches don't use parameter on the other hand; they can be prefixed with <code>--no-</code> string to opt them out; see appledoc help output to identify these switches. This is especially useful to disable factory default or global setting. For example: to enable doc set installation, you would use <code>--install-docset</code>, and to disable it: <code>--no-install-docset</code>.
 			<p>
 			
 			
@@ -85,7 +85,7 @@
 				<li><code>$YEAR</code>: Replaced with current year in format <code>yyyy</code>.</li>
 				<li><code>$UPDATEDATE</code>: Replaced with current date in format <code>yyyy-MM-dd</code>.</li>
 			</ul>
-			All settings that can use these placeholders are marked with <code>appledoc --help</code>.</p>
+			All settings that can use these placeholders are marked in help output by running <code>appledoc --help</code>. This works regardless of whether the setting value came from factory defaults, global setting or command line switch!</p>
 		</div>
 		<div id="aside">
 			<h2>Contents</h2>
