@@ -21,6 +21,7 @@
 			<p>Objective-C documentation set generator.</p>
 		</div>
 		<div id="container">
+			<a name="settings"></a>
 			<h2>Settings and parameters</h2>
 			<p>appledoc has been designed to keep the command line as simple as possible. On the other hand, it offers many command line swithces as parameters for you to refine generated output. However only a handful of these parameters are unique from project to project, most of them are common to many projects - company name, documentation set information, etc. To strike the balance, appledoc uses sensible defaults plus it allows you specify common parameters as global settings. In fact, there are three layers of settings:
 			<ul>
@@ -32,6 +33,7 @@
 			<p>
 			
 			
+			<a name="globals"></a>
 			<h2>Global settings</h2>
 			<p>Global settings are configured through a standard plist file. The path of the global settings file is specified through <code>--templates</code> command line switch - the same switch is used for giving the path to the template files used for generating output (HTML and CSS files for example). So global settings file is located at the same path as template files. As it would be tedious to specify this path for every run, appledoc uses two predefined paths for locating these files:
 			<ul>
@@ -75,6 +77,7 @@
 			Most commonly used global settings include <code>--project-company</code>, <code>--company-id</code>, <code>--verbose</code>, <code>--logformat</code> and similar. These are all settings that are ussually constant between the projects and would otherwise require repeating command line swithces on everry run. Of course you can still override them on specific projects if needed!</p>
 			
 			
+			<a name="placeholders"></a>
 			<h2>Settings placeholder strings</h2>
 			<p>To avoid repetition and simplify command line interface even further, many settings allow you to specify placeholder strings that are replaced with actual settings values. Available placeholders are:
 			<ul>
@@ -92,6 +95,7 @@
 			<h2>Command line examples</h2>
 			<p>Find some examples of command line usage below. Each command line switch is written in it's own line to make the output more readable; switches should be delimited with space normally!</p>
 			
+			<a name="minimumCmdLine"></a>
 			<h3>Minimum command line</h3>
 			<p>
 <pre>appledoc
@@ -103,6 +107,7 @@
 			Parses files from current directory and generates HTML files in the given output path. HTML files are then used to generate documentation set (in given output path) and this is finally moved to shared folder where Xcode searches documentation sets. Xcode is also instructed to reload documentation, so any change is immediately visible.</p>
 			
 			
+			<a name="multipleSourcesCmdLine"></a>
 			<h3>Parsing from multiple locations</h3>
 			<p>All command line arguments after the last switch are considered as source paths. Each path is validated and as long as all are valid directory or file names, appledoc uses them for parsing. If the path is directory, it's recursively parsed for all source files. If path is file, it's parsed as source file:
 <pre>appledoc
@@ -118,6 +123,7 @@
 			<p>This allows you to include files regardless of where they reside on your computer. For example, it may be used to include headers from frameworks or libraries your project uses or simply to only parse a subset of your project files.</p>
 			
 			
+			<a name="ignoreCmdLine"></a>
 			<h3>Ignore paths</h3>
 			<p>You can instruct appledoc to ignore any number of paths or files using --ignore switches. This is useful if your project includes third party source files for example (it's much easier to put these files into a subfolder to simplify ignoring):
 <pre>appledoc
@@ -133,6 +139,7 @@
 			<p><strong>Important:</strong> Note that --ignore strings don't accept * and ? chars for unknown chars matching! However if the string starts with a star (*), the star is removed, so <code>--ignore *.m</code> is internally translated to <code>--ignore .m</code> for your convenience. But star in the middle doesn't work, so this <code>--ignore path/subpath/*.m</code> would not ignore all .m files in path/subpath as expected - in fact, it would only match files or directories which names end with path/subpath/*.m!</p>
 			
 			
+			<a name="inspectCmdLine"></a>
 			<h3>Inspect generated HTML or documentation set files</h3>
 			<p>appledoc output generation works in several steps (i.e. generate HTML, generate docset, install docset). Each step output files are used as source for next step. For performance reasons, files are moved instead of copied between these steps by default. Although this makes appledoc more efficient, it may seem strange to see output folder empty when appledoc finishes. If so, just think of --output switch as the path to temporary files used during generation. In most cases these intermediate files are not needed and are later removed manually anyway. However there are occasions where you'd want to inspect output; debugging or archiving for example. You can tell appledoc to copy instead of move like this:
 <pre>appledoc
@@ -165,6 +172,7 @@
 			<p>You can also disable HTML files generation by using <code>--no-create-html</code> switch. This effectively disables any output generation and only invokes source code parsing and comments processing. As generation phase takes most time (typically more than 90%!), this option is useful for quick validation of your comments for unknown cross references and similar. It may come handy to include it as a regular build phase for larger targets to validate your comments and then manually invoke generation before releasing.</p>
 			
 			
+			<a name="undocumentedCmdLine"></a>
 			<h3>Undocumented objects and members handling</h3>
 			<p>By default appledoc ignores all undocumented classes, categories, protocols as well as methods and properties. However you can instruct it to include undocumented objects and members in generated HTML:
 <pre>appledoc
@@ -181,6 +189,14 @@
 				<li>If <code>--search-undocumented-doc</code> is enabled, all undocumented methods and properties documentation is searched for in known super class hierarchy. If documentation is found in any of the super classes, it is copied to inherited member as well. If documentation is not found in superclasses, it is searched for in adopted protocols and copied from there if possible. If disabled, members are left undocumented and are handled that way as described below. This option is enabled by default (in fact above example doesn't need to enable it explicitly); to disable, use <code>--no-search-undocumented-doc.</code></li>
 				<li>If <code>--keep-undocumented-members</code> is enabled, all undocumented methods and properties are left and used for output. If disabled, any undocumented method or property is removed from class (of course any documentation copied over from super classes or adopted protocols in previous step is considered valid too). This option is disabled by default.</li>
 				<li>If <code>--keep-undocumented-objects</code> is enabled, all undocumented classes, categories and protocols are left. If disabled, all undocumented objects that have no documented method or property are also removed. However if undocumented object contains documented members, the object is left and used for output regardless of this option (overview section would be ommited in generated HTML)! This option is disabled by default.</li>
+			</ul></p>
+			
+			
+			<a name="miscellaneousCmdLine"></a>
+			<h3>Various tips</h3>
+			<p>
+			<ul>
+				<li>You can use <code>--print-settings</code> option to print values of all settings used for the coming session. This is perfect for debugging when things are not working according to your expectations. For example, it can save you hours of banging your head on a wall to only realize you've forgotten overriding some global setting (it sure saved our heads a lot :). It doesn't affect performance, so you can simply include it in your <a href="#globals">global settings</a>.</li>
 			</ul></p>
 		</div>
 		<div id="aside">
