@@ -103,8 +103,8 @@
 			Parses files from current directory and generates HTML files in the given output path. HTML files are then used to generate documentation set (in given output path) and this is finally moved to shared folder where Xcode searches documentation sets. Xcode is also instructed to reload documentation, so any change is immediately visible.</p>
 			
 			
-			<h3>Parsing from multiple sources</h3>
-			<p>
+			<h3>Parsing from multiple locations</h3>
+			<p>All command line arguments after the last switch are considered as source paths. Each path is validated and as long as all are valid directory or file names, appledoc uses them for parsing. If the path is directory, it's recursively parsed for all source files. If path is file, it's parsed as source file:
 <pre>appledoc
 --project-name appledoc
 --project-company "Gentle Bytes"
@@ -114,34 +114,8 @@
 ~/Projects/Frameworks/SomeHeader.h
 ~/Projects/Frameworks/AnotherFile.m
 .</pre>
-			This extends previous example by including all files from ~/Projects/Common directory and it's subdirectories and ~/Projects/Frameworks/SomeHeader.h and ~/Projects/Frameworks/AnotherFile.m files besides the files from current directory.</p>
-			<p>All command line arguments after the last switch are considered as source paths. Each path is validated and as long as all are valid directory or file names, appledoc uses them for parsing. If the path is directory, it's recursively parsed for all source files. If path is file, it's parsed as source file.</p>
+			This extends previous example by including all files from ~/Projects/Common directory and it's subdirectories and ~/Projects/Frameworks/SomeHeader.h and ~/Projects/Frameworks/AnotherFile.m files besides the files from current directory.</p>			
 			<p>This allows you to include files regardless of where they reside on your computer. For example, it may be used to include headers from frameworks or libraries your project uses or simply to only parse a subset of your project files.</p>
-			
-			
-			<h3>Inspect generated HTML files</h3>
-			<p>appledoc output generation works in several steps (i.e. generate HTML, generate docset, install docset). Each step output files are used as source for next step. For performance reasons, files are moved instead of copied between these steps. Although this makes appledoc efficient, it may seem strange to see output folder empty when appledoc finishes. If so, just think of --output switch as the path to temporary files used during generation. In most cases these intermediate files are not needed and are removed manually anyway. However there are occasions where you'd want to inspect output; debugging or archiving for example. At present there's no command line switch to instruct appledoc to copy instead of move, but you can prevent it performing certain steps. This automatically leaves files generated in previous step in output path. Most often you'd like to see HTML files:
-<pre>appledoc
---project-name appledoc
---project-company "Gentle Bytes"
---company-id com.gentlebytes
---output ~/help
---no-create-docset
-.</pre>
-			By adding <code>--no-create-docset</code> you instruct appledoc to create HTML and then quit. Using this command line, you'll find HTML files in ~/help/html.
-			</p>
-			
-			
-			<h3>Inspect generated documentation set files</h3>
-			<p>If you'd like to inspect documentation set files use --no-install-docset instead:
-<pre>appledoc
---project-name appledoc
---project-company "Gentle Bytes"
---company-id com.gentlebytes
---output ~/help
---no-install-docset
-.</pre>
-			Using this command line, you'll find docset files in ~/help/docset. The docset is already indexed but all xml files used for indexing are left (these files are removed from installed docset!).</p>
 			
 			
 			<h3>Ignore paths</h3>
@@ -157,6 +131,38 @@
 			Using this command line would effectively ignore all files in ./Common including all subdirectories. Additionally it would ignore all files and directories with extension .m.</p>
 			<p>Each --ignore switch takes a single path that should be ignored while parsing. It works very simply: each directory or file found in the given source paths (. in this case) is checked and if it ends with one of the ignore values, the path is skipped. Or put in other words: <code>[NSString hasSuffix:]</code> is sent to each source file or directory to validate ignored files.</p>
 			<p><strong>Important:</strong> Note that --ignore strings don't accept * and ? chars for unknown chars matching! However if the string starts with a star (*), the star is removed, so <code>--ignore *.m</code> is internally translated to <code>--ignore .m</code> for your convenience. But star in the middle doesn't work, so this <code>--ignore path/subpath/*.m</code> would not ignore all .m files in path/subpath as expected - in fact, it would only match files or directories which names end with path/subpath/*.m!</p>
+			
+			
+			<h3>Inspect generated HTML or documentation set files</h3>
+			<p>appledoc output generation works in several steps (i.e. generate HTML, generate docset, install docset). Each step output files are used as source for next step. For performance reasons, files are moved instead of copied between these steps by default. Although this makes appledoc more efficient, it may seem strange to see output folder empty when appledoc finishes. If so, just think of --output switch as the path to temporary files used during generation. In most cases these intermediate files are not needed and are later removed manually anyway. However there are occasions where you'd want to inspect output; debugging or archiving for example. You can tell appledoc to copy instead of move like this:
+<pre>appledoc
+--project-name appledoc
+--project-company "Gentle Bytes"
+--company-id com.gentlebytes
+--output ~/help
+--keep-intermediate-files
+.</pre>
+			Using this option all intermediate files (i.e. HTML and docset files, including docset description XML files) are kept in output path.</p>
+			<p>Alternatively you can tell appledoc to only create HTML files:
+<pre>appledoc
+--project-name appledoc
+--project-company "Gentle Bytes"
+--company-id com.gentlebytes
+--output ~/help
+--no-create-docset
+.</pre>
+			By adding <code>--no-create-docset</code> you instruct appledoc to create HTML and then quit. Using this command line, you'll find HTML files in ~/help/html.
+			</p>
+			<p>Similarly you can tell appledoc to create docset but not install it:
+<pre>appledoc
+--project-name appledoc
+--project-company "Gentle Bytes"
+--company-id com.gentlebytes
+--output ~/help
+--no-install-docset
+.</pre>
+			Using this command line you'll find docset files in ~/help/docset. The docset is already indexed with all description xml files used for indexing left so you can inspect them. Note that in this case, html directory is moved inside ~/help/docset which effectively removes it from output path.</p>
+			<p>You can also disable HTML files generation by using <code>--no-create-html</code> switch. This effectively disables any output generation and only invokes source code parsing and comments processing. As generation phase takes most time (typically more than 90%!), this option is useful for quick validation of your comments for unknown cross references and similar. It may come handy to include it as a regular build phase for larger targets to validate your comments and then manually invoke generation before releasing.</p>
 			
 			
 			<h3>Undocumented objects and members handling</h3>
