@@ -192,6 +192,24 @@
 			</ul></p>
 			
 			
+			<a name="mergeCmdLine"></a>
+			<h3>Merging category documentation</h3>
+			<p>Apple seems to merge categories documentation to it's class to keep it together and appledoc is configured to do the same:
+<pre>appledoc
+--project-name appledoc
+--project-company "Gentle Bytes"
+--company-id com.gentlebytes
+--output ~/help
+--merge-categories
+.</pre>
+			This command line will merge categories and extension documentation to their classes as long as the class is also found in the given source files. In fact, this behavior is enabled by default, so you can skip <code>--merge-categories</code> switch in the above example and get the same result. You can refine how categories are merged with two additional switches:
+			<ul>
+				<li><code>--keep-merged-sections</code>: If enabled, all <a href="comments.html#misc">@name sections</a> from categories are preserved, otherwise all methods from category are merged into a single section using category name as section title. This is disabled by default as this seems to be how Apple does it. Enabling this option may result in fragmented class documentation, so experiment a bit to see what works best for you.</li>
+				<li><code>--prefix-merged-sections</code>: If enabled, all merged category section titles are prefixed with category name, otherwise original title is left. This is disabled by default, but you can enable it if it suits you better - again, experiment to see what works for you. This switch is ignored unless <code>--keep-merged-section</code> is enabled! <strong>Important:</strong> extension sections are never prefixed regardless of this setting!</li>
+			</ul>
+			Both switches are ignored if categories merging is disabled (i.e. <code>--no-merge-categories</code>!</p>
+			
+			
 			<a name="miscellaneousCmdLine"></a>
 			<h3>Various tips</h3>
 			<p>
@@ -213,15 +231,6 @@
 			&copy; 2009-2010 <a href="http://gentlebytes.com">Gentle Bytes</a>. All rights reserved.
 		</div>
 	</article>
-	<script type="text/javascript">
-	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-	</script>
-	<script type="text/javascript">
-	try {
-	var pageTracker = _gat._getTracker("UA-11836532-1");
-	pageTracker._trackPageview();
-	} catch(err) {}</script>
 </body>
 
 </html>
