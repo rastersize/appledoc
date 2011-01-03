@@ -92,7 +92,7 @@
 			<h2>Command line examples</h2>
 			<p>Find some examples of command line usage below. Each command line switch is written in it's own line to make the output more readable; switches should be delimited with space normally!</p>
 			
-			<h3>Minimum command line:</h3>
+			<h3>Minimum command line</h3>
 			<p>
 <pre>appledoc
 --project-name appledoc
@@ -101,6 +101,22 @@
 --output ~/help
 .</pre>
 			Parses files from current directory and generates HTML files in the given output path. HTML files are then used to generate documentation set (in given output path) and this is finally moved to shared folder where Xcode searches documentation sets. Xcode is also instructed to reload documentation, so any change is immediately visible.</p>
+			
+			
+			<h3>Parsing from multiple sources</h3>
+			<p>
+<pre>appledoc
+--project-name appledoc
+--project-company "Gentle Bytes"
+--company-id com.gentlebytes
+--output ~/help
+~/Projects/Common
+~/Projects/Frameworks/SomeHeader.h
+~/Projects/Frameworks/AnotherFile.m
+.</pre>
+			This extends previous example by including all files from ~/Projects/Common directory and it's subdirectories and ~/Projects/Frameworks/SomeHeader.h and ~/Projects/Frameworks/AnotherFile.m files besides the files from current directory.</p>
+			<p>All command line arguments after the last switch are considered as source paths. Each path is validated and as long as all are valid directory or file names, appledoc uses them for parsing. If the path is directory, it's recursively parsed for all source files. If path is file, it's parsed as source file.</p>
+			<p>This allows you to include files regardless of where they reside on your computer. For example, it may be used to include headers from frameworks or libraries your project uses or simply to only parse a subset of your project files.</p>
 			
 			
 			<h3>Inspect generated HTML files</h3>
