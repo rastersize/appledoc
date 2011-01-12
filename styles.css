@@ -14,6 +14,11 @@ body {
 	border-bottom: 1px dotted #c9c9c9;
 }
 
+.value {
+	font-family: Menlo, Monaco, "Courier New", Courier, mono;
+	font-size: 0.7em;
+}
+
 #download { 
 	float: right;
 	padding-right: 120px;

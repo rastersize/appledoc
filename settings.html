@@ -79,42 +79,56 @@
 			
 			<a name="placeholders"></a>
 			<h2>Settings placeholder strings</h2>
-			<p>To avoid repetition and simplify command line interface even further, many settings allow you to specify placeholder strings that are replaced with actual settings values. Available placeholders are:
+			<p>To avoid repetition and simplify command line interface even further, many settings allow you to specify placeholder strings that are replaced with actual settings values. Commonly used placeholders are:
 			<ul>
-				<li><code>$PROJECT</code>: Replaced with the value of <code>--project-name</code>.</li>
-				<li><code>$PROJECTID</code>: Replaced with normalized value of <code>--project-name</code>.</li>
-				<li><code>$COMPANY</code>: Replaced with the value of <code>--project-company</code>.</li>
-				<li><code>$COMPANYID</code>: Replaced with the value of <code>--company-id</code>.</li>
-				<li><code>$VERSION</code>: Replaced with the value of <code>--project-version</code>.</li>
-				<li><code>$VERSIONID</code>: Replaced with normalized value of <code>--project-version</code>.</li>
-				<li><code>$YEAR</code>: Replaced with current year in format <code>yyyy</code>.</li>
-				<li><code>$UPDATEDATE</code>: Replaced with current date in format <code>yyyy-MM-dd</code>.</li>
-				<li><code>$DOCSETATOMFILENAME</code>: Replaced with the value of <code>--docset-atom-filename</code>.</li>
-				<li><code>$DOCSETXARFILENAME</code>: Replaced with the value of <code>--docset-xar-filename</code>.</li>
+				<li><code>%PROJECT</code>: Replaced with the value of <code>--project-name</code>.</li>
+				<li><code>%PROJECTID</code>: Replaced with normalized value of <code>--project-name</code>.</li>
+				<li><code>%COMPANY</code>: Replaced with the value of <code>--project-company</code>.</li>
+				<li><code>%COMPANYID</code>: Replaced with the value of <code>--company-id</code>.</li>
+				<li><code>%VERSION</code>: Replaced with the value of <code>--project-version</code>.</li>
+				<li><code>%VERSIONID</code>: Replaced with normalized value of <code>--project-version</code>.</li>
+				<li><code>%YEAR</code>: Replaced with current year in format <code>yyyy</code>.</li>
+				<li><code>%UPDATEDATE</code>: Replaced with current date in format <code>yyyy-MM-dd</code>.</li>
 			</ul>
-			Normalized values are actual strings where all whitespace is replaced with minus signs. So "My Great Project" would become "My-Great-Project".</p>
+			Normalized values are actual strings where all whitespace is replaced with minus signs. So "My Great Project" would become "My-Great-Project".</p>			
+			<p>Other available placehoders are (<strong>Note:</strong> Due to the usage of above mentioned placeholders as default values you should rarely if ever need supply custom values through command line - default values should result in sensible results! However all customization nuts, knock yourself out :)):
+			<ul>
+				<li><code>%DOCSETBUNDLEFILENAME</code>: Replaced with the value of <code>--docset-bundle-filename</code>. Defaults to 
+					<span class="value">%COMPANYID.%PROJECTID.docset</span>, which results into something like 
+					<span class="value">com.gentlebytes.appledoc.docset</span>.</li>
+				<li><code>%DOCSETATOMFILENAME</code>: Replaced with the value of <code>--docset-atom-filename</code>. Defaults to 
+					<span class="value">%COMPANYID.%PROJECTID.atom</span>, which results into something like 
+					<span class="value">com.gentlebytes.appledoc.atom</span>.
+				</li>
+				<li><code>%DOCSETPACKAGEFILENAME</code>: Replaced with the value of <code>--docset-package-filename</code>. Defaults to 
+					<span class="value">%COMPANYID.%PROJECTID-%VERSIONID.xar</span>, which results into something like 
+					<span class="value">com.gentlebytes.appledoc-2.0.xar</span>.
+				</li>
+			</ul>
+			If you're wondering why these placeholders exist, they come extremly handy when <a href="#publishDocSet">preparing documentation set for publishing</a>.</p>
 			<p>All settings that can use these placeholders are marked in help output by running <code>appledoc --help</code>. This works regardless of whether the setting value came from factory defaults, global setting or command line switch!</p>
 			
 			
 			
-			<h2>Command line examples</h2>
-			<p>Find some examples of command line usage below. Each command line switch is written in it's own line to make the output more readable; switches should be delimited with space normally!</p>
-			
-			<a name="minimumCmdLine"></a>
-			<h3>Minimum command line</h3>
-			<p>
+			<h2>Basic command line examples</h2>
+			<div class="cmdlineexamplesection">
+				<p>Find some examples of command line usage below. Each command line switch is written in it's own line to make the output more readable; switches should be delimited with space normally!</p>
+				
+				<a name="minimumCmdLine"></a>
+				<h3>Minimum command line</h3>
+				<p>
 <pre>appledoc
 --project-name appledoc
 --project-company "Gentle Bytes"
 --company-id com.gentlebytes
 --output ~/help
 .</pre>
-			Parses files from current directory and generates HTML files in the given output path. HTML files are then used to generate documentation set (in given output path) and this is finally moved to shared folder where Xcode searches documentation sets. Xcode is also instructed to reload documentation, so any change is immediately visible.</p>
-			
-			
-			<a name="multipleSourcesCmdLine"></a>
-			<h3>Parsing from multiple locations</h3>
-			<p>All command line arguments after the last switch are considered as source paths. Each path is validated and as long as all are valid directory or file names, appledoc uses them for parsing. If the path is directory, it's recursively parsed for all source files. If path is file, it's parsed as source file:
+				Parses files from current directory and generates HTML files in the given output path. HTML files are then used to generate documentation set (in given output path) and this is finally moved to shared folder where Xcode searches documentation sets. Xcode is also instructed to reload documentation, so any change is immediately visible.</p>
+				
+				
+				<a name="multipleSourcesCmdLine"></a>
+				<h3>Parsing from multiple locations</h3>
+				<p>All command line arguments after the last switch are considered as source paths. Each path is validated and as long as all are valid directory or file names, appledoc uses them for parsing. If the path is directory, it's recursively parsed for all source files. If path is file, it's parsed as source file:
 <pre>appledoc
 --project-name appledoc
 --project-company "Gentle Bytes"
@@ -124,13 +138,13 @@
 ~/Projects/Frameworks/SomeHeader.h
 ~/Projects/Frameworks/AnotherFile.m
 .</pre>
-			This extends previous example by including all files from ~/Projects/Common directory and it's subdirectories and ~/Projects/Frameworks/SomeHeader.h and ~/Projects/Frameworks/AnotherFile.m files besides the files from current directory.</p>			
-			<p>This allows you to include files regardless of where they reside on your computer. For example, it may be used to include headers from frameworks or libraries your project uses or simply to only parse a subset of your project files.</p>
-			
-			
-			<a name="ignoreCmdLine"></a>
-			<h3>Ignore paths</h3>
-			<p>You can instruct appledoc to ignore any number of paths or files using <code>--ignore</code> switches. This is useful if your project includes third party source files for example (it's much easier to put these files into a subfolder to simplify ignoring):
+				This extends previous example by including all files from ~/Projects/Common directory and it's subdirectories and ~/Projects/Frameworks/SomeHeader.h and ~/Projects/Frameworks/AnotherFile.m files besides the files from current directory.</p>			
+				<p>This allows you to include files regardless of where they reside on your computer. For example, it may be used to include headers from frameworks or libraries your project uses or simply to only parse a subset of your project files.</p>
+				
+				
+				<a name="ignoreCmdLine"></a>
+				<h3>Ignore paths</h3>
+				<p>You can instruct appledoc to ignore any number of paths or files using <code>--ignore</code> switches. This is useful if your project includes third party source files for example (it's much easier to put these files into a subfolder to simplify ignoring):
 <pre>appledoc
 --project-name appledoc
 --project-company "Gentle Bytes"
@@ -139,30 +153,37 @@
 --ignore Common
 --ignore .m
 .</pre>
-			Using this command line would effectively ignore all files in ./Common including all subdirectories. Additionally it would ignore all files and directories with extension .m.</p>
-			<p>Each --ignore switch takes a single path that should be ignored while parsing. It works very simply: each directory or file found in the given source paths (. in this case) is checked and if it ends with one of the ignore values, the path is skipped. Or put in other words: <code>[NSString hasSuffix:]</code> is sent to each source file or directory to validate ignored files.</p>
-			<p><strong>Important:</strong> Note that --ignore strings don't accept * and ? chars for unknown chars matching! However if the string starts with a star (*), the star is removed, so <code>--ignore *.m</code> is internally translated to <code>--ignore .m</code> for your convenience. But star in the middle doesn't work, so this <code>--ignore path/subpath/*.m</code> would not ignore all .m files in path/subpath as expected - in fact, it would only match files or directories which names end with path/subpath/*.m!</p>
+				Using this command line would effectively ignore all files in ./Common including all subdirectories. Additionally it would ignore all files and directories with extension .m.</p>
+				<p>Each --ignore switch takes a single path that should be ignored while parsing. It works very simply: each directory or file found in the given source paths (. in this case) is checked and if it ends with one of the ignore values, the path is skipped. Or put in other words: <code>[NSString hasSuffix:]</code> is sent to each source file or directory to validate ignored files.</p>
+				<p><strong>Important:</strong> Note that --ignore strings don't accept * and ? chars for unknown chars matching! However if the string starts with a star (*), the star is removed, so <code>--ignore *.m</code> is internally translated to <code>--ignore .m</code> for your convenience. But star in the middle doesn't work, so this <code>--ignore path/subpath/*.m</code> would not ignore all .m files in path/subpath as expected - in fact, it would only match files or directories which names end with path/subpath/*.m!</p>				
+			</div>
 			
 			
-			<a name="publishDocSet"></a>
-			<h3>Prepare documentation set for publishing</h3>
-			<p>appledoc can prepare documentation set for publishing too, just add <code>--publish-docset</code> and <code>--docset-feed-url</code> switches to command line like this:
+			<h2>Advanced command line examples</h2>
+			<p>This section contains additional examples and descriptions of command line switches which usage may not be immediately obvious.</p>
+			
+				<a name="publishDocSet"></a>
+				<h3>Prepare documentation set for publishing</h3>
+				<p>appledoc can prepare documentation set for publishing too, just add <code>--publish-docset</code>, <code>--docset-feed-url</code> and <code>--docset-package-url</code> switches to command line like this:
 <pre>appledoc
 --project-name appledoc
 --project-company "Gentle Bytes"
 --company-id com.gentlebytes
 --output ~/Projects/Help/appledoc
 --docset-feed-url http://gentlebytes.com/downloads/$DOCSETATOMFILENAME
+--docset-package-url http://gentlebytes.com/downloads/$DOCSETPACKAGEFILENAME
 --publish-docset 
 .</pre>
-			This command line will create and install documentation set (publishing only works over installed documentation set!) and then run docsetutil to create compressed documentation set file and atom feed you can upload to your server. Note the usage of <a href="#placeholders"><code>$DOCSETATOMFILENAME</code></a> placeholder!</p>
-			<p>Both generated files, compressed documentation set and atom file are written to <code>--output</code> path, so you can use that information to pass them to <code>rsync</code> or similar tool for actually uploading to your server (appledoc doesn't do uploading itself, it only generates necessary files!). If the atom file already exists on the output path, it is updated with information - docsetutil parses the file for an entry with specified <code>--version</code> and if found, the entry is updated. If no entry matches the version, a new entry is added to the file.</p>
-			<p>Note that you can also include <code>--docset-fallback-url</code> so that Xcode can get to your documentation installed on remote server. The location given should point to the contents of your DocSet <code>Documents</code> folder (at present appledoc doesn't prepare a copy of this folder, you can find it either at <code>--docset-install-path</code> (if you use default value, add <a href="#miscellaneousCmdLine"><code>--print-settings</code></a> command line switch) or alternatively use <code>--keep-intermediate</code> and find the files at your <code>--output</code> location).</p>
-			
-			
-			<a name="inspectCmdLine"></a>
-			<h3>Inspect generated HTML or documentation set files</h3>
-			<p>appledoc output generation works in several steps (i.e. generate HTML, generate docset, install docset). Each step output files are used as source for next step. For performance reasons, files are moved instead of copied between these steps by default. Although this makes appledoc more efficient, it may seem strange to see output folder empty when appledoc finishes. If so, just think of --output switch as the path to temporary files used during generation. In most cases these intermediate files are not needed and are later removed manually anyway. However there are occasions where you'd want to inspect output; debugging or archiving for example. You can tell appledoc to copy instead of move like this:
+				This command line will create and install documentation set and finally run docsetutil over installed docset to create compressed documentation set file and atom feed you can upload to your server. Both files are saved to <code>publish</code> subdirectory within <code>--output</code> path. You can then pass them to <code>rsync</code> or similar tool for actually uploading to your server (although command line switch may suggest so, appledoc doesn't do uploading itself, it only generates necessary files!). When uploading, make sure the files are available at the URLs given to <code>--docset-feed-url</code> and <code>--docset-package-url</code>! You can use <a href="#miscellaneousCmdLine"><code>--print-settings</code></a> command line switch to have appledoc print the actual URLs after replacing <a href="#placeholders">template placeholders</a>.</p>
+				<p><strong>Important:</strong> When you increment versions, the atom file needs to be updated properly - a new entry needs to be inserted for each new version. To allow that, appledoc checks if the atom file already exists at output path. If so, the existing file is updated with new information by docsetutil. First the file is parsed and if an entry is found corresponding to <code>--project-version</code>, the entry is updated. If no entry matching the version is found, a new entry is added to the file. Therefore it is important to keep the generated atom file at output path (you can safely remove package (.xar file) after uploading though)! In fact, this is the mechanism used by appledoc to have the atom file updated with new versions, so keep that in mind!</p>
+				<p><strong>Note:</strong> Notice the usage of <code>$DOCSETATOMFILENAME</code> and <code>$DOCSETPACKAGEFILENAME</code> placeholders for command line switches - it is <a href="#placeholders">recommended to use these</a> to keep the actual filenames in sync with information written to atom file!</p>
+				<p><strong>Note:</strong> You can also include <code>--docset-fallback-url</code> so that Xcode can get to your documentation installed on remote server. The location given should point to the contents of your DocSet <code>Documents</code> folder (at present appledoc doesn't prepare a copy of this folder, you can find it either at <code>--docset-install-path</code> (if you use default value, add <a href="#miscellaneousCmdLine"><code>--print-settings</code></a> command line switch to have it printed for you) or alternatively use <code>--keep-intermediate</code> and find the files at your <code>--output</code> location).</p>
+
+
+			<div class="cmdlineexamplesection">			
+				<a name="inspectCmdLine"></a>
+				<h3>Inspect generated HTML or documentation set files</h3>
+				<p>appledoc output generation works in several steps (i.e. generate HTML, generate docset, install docset). Each step output files are used as source for next step. For performance reasons, files are moved instead of copied between these steps by default. Although this makes appledoc more efficient, it may seem strange to see output folder empty when appledoc finishes. If so, just think of --output switch as the path to temporary files used during generation. In most cases these intermediate files are not needed and are later removed manually anyway. However there are occasions where you'd want to inspect output; debugging or archiving for example. You can tell appledoc to copy instead of move like this:
 <pre>appledoc
 --project-name appledoc
 --project-company "Gentle Bytes"
@@ -170,8 +191,8 @@
 --output ~/help
 --keep-intermediate-files
 .</pre>
-			Using this option all intermediate files (i.e. HTML and docset files, including docset description XML files) are kept in output path.</p>
-			<p>Alternatively you can tell appledoc to only create HTML files:
+				Using this option all intermediate files (i.e. HTML and docset files, including docset description XML files) are kept in output path.</p>
+				<p>Alternatively you can tell appledoc to only create HTML files:
 <pre>appledoc
 --project-name appledoc
 --project-company "Gentle Bytes"
@@ -179,9 +200,9 @@
 --output ~/help
 --no-create-docset
 .</pre>
-			By adding <code>--no-create-docset</code> you instruct appledoc to create HTML and then quit. Using this command line, you'll find HTML files in ~/help/html.
-			</p>
-			<p>Similarly you can tell appledoc to create docset but not install it:
+				By adding <code>--no-create-docset</code> you instruct appledoc to create HTML and then quit. Using this command line, you'll find HTML files in ~/help/html.
+				</p>
+				<p>Similarly you can tell appledoc to create docset but not install it:
 <pre>appledoc
 --project-name appledoc
 --project-company "Gentle Bytes"
@@ -189,13 +210,13 @@
 --output ~/help
 --no-install-docset
 .</pre>
-			Using this command line you'll find docset files in ~/help/docset. The docset is already indexed with all description xml files used for indexing left so you can inspect them. Note that in this case, html directory is moved inside ~/help/docset which effectively removes it from output path.</p>
-			<p>You can also disable HTML files generation by using <code>--no-create-html</code> switch. This effectively disables any output generation and only invokes source code parsing and comments processing. As generation phase takes most time (typically more than 90%!), this option is useful for quick validation of your comments for unknown cross references and similar. It may come handy to include it as a regular build phase for larger targets to validate your comments and then manually invoke generation before releasing.</p>
-			
-			
-			<a name="undocumentedCmdLine"></a>
-			<h3>Undocumented objects and members handling</h3>
-			<p>By default appledoc ignores all undocumented classes, categories, protocols as well as methods and properties. However you can instruct it to include undocumented objects and members in generated HTML:
+				Using this command line you'll find docset files in ~/help/docset. The docset is already indexed with all description xml files used for indexing left so you can inspect them. Note that in this case, html directory is moved inside ~/help/docset which effectively removes it from output path.</p>
+				<p>You can also disable HTML files generation by using <code>--no-create-html</code> switch. This effectively disables any output generation and only invokes source code parsing and comments processing. As generation phase takes most time (typically more than 90%!), this option is useful for quick validation of your comments for unknown cross references and similar. It may come handy to include it as a regular build phase for larger targets to validate your comments and then manually invoke generation before releasing.</p>
+				
+				
+				<a name="undocumentedCmdLine"></a>
+				<h3>Undocumented objects and members handling</h3>
+				<p>By default appledoc ignores all undocumented classes, categories, protocols as well as methods and properties. However you can instruct it to include undocumented objects and members in generated HTML:
 <pre>appledoc
 --project-name appledoc
 --project-company "Gentle Bytes"
@@ -205,17 +226,17 @@
 --keep-undocumented-members
 --search-undocumented-doc
 .</pre>
-			This command line would include every parsed object (class, category and protocol) and it's member (method or property). Additionally it would search for documentation of undocumented members in super classes and adopted protocols. To better understand how these switched interact with each other this is the workflow used:
-			<ul>
-				<li>If <code>--search-undocumented-doc</code> is enabled, all undocumented methods and properties documentation is searched for in known super class hierarchy. If documentation is found in any of the super classes, it is copied to inherited member as well. If documentation is not found in superclasses, it is searched for in adopted protocols and copied from there if possible. If disabled, members are left undocumented and are handled that way as described below. This option is enabled by default (in fact above example doesn't need to enable it explicitly); to disable, use <code>--no-search-undocumented-doc.</code></li>
-				<li>If <code>--keep-undocumented-members</code> is enabled, all undocumented methods and properties are left and used for output. If disabled, any undocumented method or property is removed from class (of course any documentation copied over from super classes or adopted protocols in previous step is considered valid too). This option is disabled by default.</li>
-				<li>If <code>--keep-undocumented-objects</code> is enabled, all undocumented classes, categories and protocols are left. If disabled, all undocumented objects that have no documented method or property are also removed. However if undocumented object contains documented members, the object is left and used for output regardless of this option (overview section would be ommited in generated HTML)! This option is disabled by default.</li>
-			</ul></p>
-			
-			
-			<a name="mergeCmdLine"></a>
-			<h3>Merging category documentation</h3>
-			<p>Apple seems to merge categories documentation to it's class to keep it together and appledoc is configured to do the same:
+				This command line would include every parsed object (class, category and protocol) and it's member (method or property). Additionally it would search for documentation of undocumented members in super classes and adopted protocols. To better understand how these switched interact with each other this is the workflow used:
+				<ul>
+					<li>If <code>--search-undocumented-doc</code> is enabled, all undocumented methods and properties documentation is searched for in known super class hierarchy. If documentation is found in any of the super classes, it is copied to inherited member as well. If documentation is not found in superclasses, it is searched for in adopted protocols and copied from there if possible. If disabled, members are left undocumented and are handled that way as described below. This option is enabled by default (in fact above example doesn't need to enable it explicitly); to disable, use <code>--no-search-undocumented-doc.</code></li>
+					<li>If <code>--keep-undocumented-members</code> is enabled, all undocumented methods and properties are left and used for output. If disabled, any undocumented method or property is removed from class (of course any documentation copied over from super classes or adopted protocols in previous step is considered valid too). This option is disabled by default.</li>
+					<li>If <code>--keep-undocumented-objects</code> is enabled, all undocumented classes, categories and protocols are left. If disabled, all undocumented objects that have no documented method or property are also removed. However if undocumented object contains documented members, the object is left and used for output regardless of this option (overview section would be ommited in generated HTML)! This option is disabled by default.</li>
+				</ul></p>
+				
+				
+				<a name="mergeCmdLine"></a>
+				<h3>Merging category documentation</h3>
+				<p>Apple seems to merge categories documentation to it's class to keep it together and appledoc is configured to do the same:
 <pre>appledoc
 --project-name appledoc
 --project-company "Gentle Bytes"
@@ -223,21 +244,24 @@
 --output ~/help
 --merge-categories
 .</pre>
-			This command line will merge categories and extension documentation to their classes as long as the class is also found in the given source files. In fact, this behavior is enabled by default, so you can skip <code>--merge-categories</code> switch in the above example and get the same result. You can refine how categories are merged with two additional switches:
-			<ul>
-				<li><code>--keep-merged-sections</code>: If enabled, all <a href="comments.html#misc">@name sections</a> from categories are preserved, otherwise all methods from category are merged into a single section using category name as section title. This is disabled by default as this seems to be how Apple does it. Enabling this option may result in fragmented class documentation, so experiment a bit to see what works best for you.</li>
-				<li><code>--prefix-merged-sections</code>: If enabled, all merged category section titles are prefixed with category name, otherwise original title is left. This is disabled by default, but you can enable it if it suits you better - again, experiment to see what works for you. This switch is ignored unless <code>--keep-merged-section</code> is enabled! <strong>Important:</strong> extension sections are never prefixed regardless of this setting!</li>
-			</ul>
-			Both switches are ignored if categories merging is disabled (i.e. <code>--no-merge-categories</code>!</p>
+				This command line will merge categories and extension documentation to their classes as long as the class is also found in the given source files. In fact, this behavior is enabled by default, so you can skip <code>--merge-categories</code> switch in the above example and get the same result. You can refine how categories are merged with two additional switches:
+				<ul>
+					<li><code>--keep-merged-sections</code>: If enabled, all <a href="comments.html#misc">@name sections</a> from categories are preserved, otherwise all methods from category are merged into a single section using category name as section title. This is disabled by default as this seems to be how Apple does it. Enabling this option may result in fragmented class documentation, so experiment a bit to see what works best for you.</li>
+					<li><code>--prefix-merged-sections</code>: If enabled, all merged category section titles are prefixed with category name, otherwise original title is left. This is disabled by default, but you can enable it if it suits you better - again, experiment to see what works for you. This switch is ignored unless <code>--keep-merged-section</code> is enabled! <strong>Important:</strong> extension sections are never prefixed regardless of this setting!</li>
+				</ul>
+				Both switches are ignored if categories merging is disabled (i.e. <code>--no-merge-categories</code>!</p>
+			</div>
 			
 			
 			<a name="miscellaneousCmdLine"></a>
-			<h3>Various tips</h3>
-			<p>
-			<ul>
-				<li>You can use <code>--print-settings</code> option to print values of all settings used for the coming session. This is perfect for debugging when things are not working according to your expectations. For example, it can save you hours of banging your head on a wall to only realize you've forgotten overriding some global setting (it sure saved our heads a lot :). It doesn't affect performance, so you can simply include it in your <a href="#globals">global settings</a>.</li>
-				<li>You can use <code>--repeat-first-par</code> option to enable or disable repeating first paragraph in methods and properties discussion section. By default appledoc repeats first paragraph, but you can disable it with <code>--no-repeat-first-par</code>. <strong>Important:</strong> Note that discussion section is omitted for methods or properties that only have a single paragraph, even if repeating is enabled!</li>
-			</ul></p>
+			<h2>Various tips</h2>
+			<div class="cmdlineexamplesection">
+				<p>
+				<ul>
+					<li>You can use <code>--print-settings</code> option to print values of all settings used for the current session. Settings are printed after replacing <a href="#placeholders">placeholder values</a>, so this makes it perfect for getting various paths and similar. Or for debugging when things are not working according to your expectations. For example, it can save you hours of banging your head on a wall to only realize you've forgotten overriding some global setting (it sure saved our heads a lot :). This option has negligible affect to performance, so you can simply include it in your <a href="#globals">global settings</a> to avoid command line clutter.</li>
+					<li>You can use <code>--repeat-first-par</code> option to enable or disable repeating first paragraph in methods and properties discussion section. By default appledoc repeats first paragraph, but you can disable it with <code>--no-repeat-first-par</code>. <strong>Important:</strong> Note that discussion section is omitted for methods or properties that only have a single paragraph, even if repeating is enabled!</li>
+				</ul></p>
+			</div>
 		</div>
 		<div id="aside">
 			<h2>Contents</h2>
