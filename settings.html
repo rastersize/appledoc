@@ -82,13 +82,18 @@
 			<p>To avoid repetition and simplify command line interface even further, many settings allow you to specify placeholder strings that are replaced with actual settings values. Available placeholders are:
 			<ul>
 				<li><code>$PROJECT</code>: Replaced with the value of <code>--project-name</code>.</li>
+				<li><code>$PROJECTID</code>: Replaced with normalized value of <code>--project-name</code>.</li>
 				<li><code>$COMPANY</code>: Replaced with the value of <code>--project-company</code>.</li>
 				<li><code>$COMPANYID</code>: Replaced with the value of <code>--company-id</code>.</li>
 				<li><code>$VERSION</code>: Replaced with the value of <code>--project-version</code>.</li>
+				<li><code>$VERSIONID</code>: Replaced with normalized value of <code>--project-version</code>.</li>
 				<li><code>$YEAR</code>: Replaced with current year in format <code>yyyy</code>.</li>
 				<li><code>$UPDATEDATE</code>: Replaced with current date in format <code>yyyy-MM-dd</code>.</li>
+				<li><code>$DOCSETATOMFILENAME</code>: Replaced with the value of <code>--docset-atom-filename</code>.</li>
+				<li><code>$DOCSETXARFILENAME</code>: Replaced with the value of <code>--docset-xar-filename</code>.</li>
 			</ul>
-			All settings that can use these placeholders are marked in help output by running <code>appledoc --help</code>. This works regardless of whether the setting value came from factory defaults, global setting or command line switch!</p>
+			Normalized values are actual strings where all whitespace is replaced with minus signs. So "My Great Project" would become "My-Great-Project".</p>
+			<p>All settings that can use these placeholders are marked in help output by running <code>appledoc --help</code>. This works regardless of whether the setting value came from factory defaults, global setting or command line switch!</p>
 			
 			
 			
@@ -125,7 +130,7 @@
 			
 			<a name="ignoreCmdLine"></a>
 			<h3>Ignore paths</h3>
-			<p>You can instruct appledoc to ignore any number of paths or files using --ignore switches. This is useful if your project includes third party source files for example (it's much easier to put these files into a subfolder to simplify ignoring):
+			<p>You can instruct appledoc to ignore any number of paths or files using <code>--ignore</code> switches. This is useful if your project includes third party source files for example (it's much easier to put these files into a subfolder to simplify ignoring):
 <pre>appledoc
 --project-name appledoc
 --project-company "Gentle Bytes"
@@ -137,6 +142,22 @@
 			Using this command line would effectively ignore all files in ./Common including all subdirectories. Additionally it would ignore all files and directories with extension .m.</p>
 			<p>Each --ignore switch takes a single path that should be ignored while parsing. It works very simply: each directory or file found in the given source paths (. in this case) is checked and if it ends with one of the ignore values, the path is skipped. Or put in other words: <code>[NSString hasSuffix:]</code> is sent to each source file or directory to validate ignored files.</p>
 			<p><strong>Important:</strong> Note that --ignore strings don't accept * and ? chars for unknown chars matching! However if the string starts with a star (*), the star is removed, so <code>--ignore *.m</code> is internally translated to <code>--ignore .m</code> for your convenience. But star in the middle doesn't work, so this <code>--ignore path/subpath/*.m</code> would not ignore all .m files in path/subpath as expected - in fact, it would only match files or directories which names end with path/subpath/*.m!</p>
+			
+			
+			<a name="publishDocSet"></a>
+			<h3>Prepare documentation set for publishing</h3>
+			<p>appledoc can prepare documentation set for publishing too, just add <code>--publish-docset</code> and <code>--docset-feed-url</code> switches to command line like this:
+<pre>appledoc
+--project-name appledoc
+--project-company "Gentle Bytes"
+--company-id com.gentlebytes
+--output ~/Projects/Help/appledoc
+--docset-feed-url http://gentlebytes.com/downloads/$DOCSETATOMFILENAME
+--publish-docset 
+.</pre>
+			This command line will create and install documentation set (publishing only works over installed documentation set!) and then run docsetutil to create compressed documentation set file and atom feed you can upload to your server. Note the usage of <a href="#placeholders"><code>$DOCSETATOMFILENAME</code></a> placeholder!</p>
+			<p>Both generated files, compressed documentation set and atom file are written to <code>--output</code> path, so you can use that information to pass them to <code>rsync</code> or similar tool for actually uploading to your server (appledoc doesn't do uploading itself, it only generates necessary files!). If the atom file already exists on the output path, it is updated with information - docsetutil parses the file for an entry with specified <code>--version</code> and if found, the entry is updated. If no entry matches the version, a new entry is added to the file.</p>
+			<p>Note that you can also include <code>--docset-fallback-url</code> so that Xcode can get to your documentation installed on remote server. The location given should point to the contents of your DocSet <code>Documents</code> folder (at present appledoc doesn't prepare a copy of this folder, you can find it either at <code>--docset-install-path</code> (if you use default value, add <a href="#miscellaneousCmdLine"><code>--print-settings</code></a> command line switch) or alternatively use <code>--keep-intermediate</code> and find the files at your <code>--output</code> location).</p>
 			
 			
 			<a name="inspectCmdLine"></a>
