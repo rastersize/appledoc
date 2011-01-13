@@ -170,13 +170,13 @@
 --project-company "Gentle Bytes"
 --company-id com.gentlebytes
 --output ~/Projects/Help/appledoc
---docset-feed-url http://gentlebytes.com/downloads/$DOCSETATOMFILENAME
---docset-package-url http://gentlebytes.com/downloads/$DOCSETPACKAGEFILENAME
+--docset-feed-url http://gentlebytes.com/downloads/%DOCSETATOMFILENAME
+--docset-package-url http://gentlebytes.com/downloads/%DOCSETPACKAGEFILENAME
 --publish-docset 
 .</pre>
 				This command line will create and install documentation set and finally run docsetutil over installed docset to create compressed documentation set file and atom feed you can upload to your server. Both files are saved to <code>publish</code> subdirectory within <code>--output</code> path. You can then pass them to <code>rsync</code> or similar tool for actually uploading to your server (although command line switch may suggest so, appledoc doesn't do uploading itself, it only generates necessary files!). When uploading, make sure the files are available at the URLs given to <code>--docset-feed-url</code> and <code>--docset-package-url</code>! You can use <a href="#miscellaneousCmdLine"><code>--print-settings</code></a> command line switch to have appledoc print the actual URLs after replacing <a href="#placeholders">template placeholders</a>.</p>
 				<p><strong>Important:</strong> When you increment versions, the atom file needs to be updated properly - a new entry needs to be inserted for each new version. To allow that, appledoc checks if the atom file already exists at output path. If so, the existing file is updated with new information by docsetutil. First the file is parsed and if an entry is found corresponding to <code>--project-version</code>, the entry is updated. If no entry matching the version is found, a new entry is added to the file. Therefore it is important to keep the generated atom file at output path (you can safely remove package (.xar file) after uploading though)! In fact, this is the mechanism used by appledoc to have the atom file updated with new versions, so keep that in mind!</p>
-				<p><strong>Note:</strong> Notice the usage of <code>$DOCSETATOMFILENAME</code> and <code>$DOCSETPACKAGEFILENAME</code> placeholders for command line switches - it is <a href="#placeholders">recommended to use these</a> to keep the actual filenames in sync with information written to atom file!</p>
+				<p><strong>Note:</strong> Notice the usage of <code>%DOCSETATOMFILENAME</code> and <code>%DOCSETPACKAGEFILENAME</code> placeholders for command line switches - it is <a href="#placeholders">recommended to use these</a> to keep the actual filenames in sync with information written to atom file!</p>
 				<p><strong>Note:</strong> You can also include <code>--docset-fallback-url</code> so that Xcode can get to your documentation installed on remote server. The location given should point to the contents of your DocSet <code>Documents</code> folder (at present appledoc doesn't prepare a copy of this folder, you can find it either at <code>--docset-install-path</code> (if you use default value, add <a href="#miscellaneousCmdLine"><code>--print-settings</code></a> command line switch to have it printed for you) or alternatively use <code>--keep-intermediate</code> and find the files at your <code>--output</code> location).</p>
 
 
