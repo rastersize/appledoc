@@ -30,7 +30,7 @@
 				<li>Command line arguments: You can override factory defaults and global settings through command line arguments.</li>
 			</ul>
 			You can change all parameters provided by appledoc through any of the above mentioned layers. To discover what settings are available, use: <pre>appledoc --help</pre> Most switches require a parameter of certain type as indicated in help output. Boolean switches don't use parameter on the other hand; they can be prefixed with <code>--no-</code> string to opt them out; see appledoc help output to identify these switches. This is especially useful to disable factory default or global setting. For example: to enable doc set installation, you would use <code>--install-docset</code>, and to disable it: <code>--no-install-docset</code>.
-			<p>
+			</p>
 			
 			
 			<a name="globals"></a>
@@ -160,6 +160,7 @@
 			
 			
 			<h2>Advanced command line examples</h2>
+			<div class="cmdlineexamplesection">
 			<p>This section contains additional examples and descriptions of command line switches which usage may not be immediately obvious.</p>
 			
 				<a name="publishDocSet"></a>
@@ -180,40 +181,6 @@
 				<p><strong>Note:</strong> You can also include <code>--docset-fallback-url</code> so that Xcode can get to your documentation installed on remote server. The location given should point to the contents of your DocSet <code>Documents</code> folder (at present appledoc doesn't prepare a copy of this folder, you can find it either at <code>--docset-install-path</code> (if you use default value, add <a href="#miscellaneousCmdLine"><code>--print-settings</code></a> command line switch to have it printed for you) or alternatively use <code>--keep-intermediate</code> and find the files at your <code>--output</code> location).</p>
 
 
-			<div class="cmdlineexamplesection">			
-				<a name="inspectCmdLine"></a>
-				<h3>Inspect generated HTML or documentation set files</h3>
-				<p>appledoc output generation works in several steps (i.e. generate HTML, generate docset, install docset). Each step output files are used as source for next step. For performance reasons, files are moved instead of copied between these steps by default. Although this makes appledoc more efficient, it may seem strange to see output folder empty when appledoc finishes. If so, just think of --output switch as the path to temporary files used during generation. In most cases these intermediate files are not needed and are later removed manually anyway. However there are occasions where you'd want to inspect output; debugging or archiving for example. You can tell appledoc to copy instead of move like this:
-<pre>appledoc
---project-name appledoc
---project-company "Gentle Bytes"
---company-id com.gentlebytes
---output ~/help
---keep-intermediate-files
-.</pre>
-				Using this option all intermediate files (i.e. HTML and docset files, including docset description XML files) are kept in output path.</p>
-				<p>Alternatively you can tell appledoc to only create HTML files:
-<pre>appledoc
---project-name appledoc
---project-company "Gentle Bytes"
---company-id com.gentlebytes
---output ~/help
---no-create-docset
-.</pre>
-				By adding <code>--no-create-docset</code> you instruct appledoc to create HTML and then quit. Using this command line, you'll find HTML files in ~/help/html.
-				</p>
-				<p>Similarly you can tell appledoc to create docset but not install it:
-<pre>appledoc
---project-name appledoc
---project-company "Gentle Bytes"
---company-id com.gentlebytes
---output ~/help
---no-install-docset
-.</pre>
-				Using this command line you'll find docset files in ~/help/docset. The docset is already indexed with all description xml files used for indexing left so you can inspect them. Note that in this case, html directory is moved inside ~/help/docset which effectively removes it from output path.</p>
-				<p>You can also disable HTML files generation by using <code>--no-create-html</code> switch. This effectively disables any output generation and only invokes source code parsing and comments processing. As generation phase takes most time (typically more than 90%!), this option is useful for quick validation of your comments for unknown cross references and similar. It may come handy to include it as a regular build phase for larger targets to validate your comments and then manually invoke generation before releasing.</p>
-				
-				
 				<a name="undocumentedCmdLine"></a>
 				<h3>Undocumented objects and members handling</h3>
 				<p>By default appledoc ignores all undocumented classes, categories, protocols as well as methods and properties. However you can instruct it to include undocumented objects and members in generated HTML:
@@ -250,6 +217,71 @@
 					<li><code>--prefix-merged-sections</code>: If enabled, all merged category section titles are prefixed with category name, otherwise original title is left. This is disabled by default, but you can enable it if it suits you better - again, experiment to see what works for you. This switch is ignored unless <code>--keep-merged-section</code> is enabled! <strong>Important:</strong> extension sections are never prefixed regardless of this setting!</li>
 				</ul>
 				Both switches are ignored if categories merging is disabled (i.e. <code>--no-merge-categories</code>!</p>
+
+
+
+				<a name="crossrefsdetection"></a>
+				<h3>Controlling cross references detection</h3>
+				<p>By default any valid cross reference word or URL, optionally embedded within <code>&lt;&gt;</code> markers is converted to cross reference link in resulting documentation. Although this greatly simplifies cross references handling, it may lead to unexpected links. For example if one of your methods or properties has selector <code>paragraph</code>, every word <em>paragraph</em> is converted to cross reference to that method. To give you control over which word should be converted to cross reference and which shouldn't, appledoc allows you to turn on explicit cross references like this:
+<pre>appledoc
+--project-name appledoc
+--project-company "Gentle Bytes"
+--company-id com.gentlebytes
+--output ~/help
+--explicit-crossref
+.</pre>
+				This command line will check cross references only in words embedded with <code>&lt;&gt;</code> markers. This gives you control over which word should be converted to cross references and which not, but requires you to use additional syntax; above example would need to be written as <code>&lt;paragraph&gt;</code>. Note: without explicit cross references option, you can still embed words with <code>&lt;&gt;</code> markers - this is optional by default, but with explicit option, markers are required!</p>
+				
+				<p>Further more, if you don't like default markers, you can use arbitrary ones for embedding cross references in your code. This is great for porting your code from other documenting systems. Here's an example:
+<pre>appledoc
+--project-name appledoc
+--project-company "Gentle Bytes"
+--company-id com.gentlebytes
+--output ~/help
+--crossref-format "#%@#"
+.</pre>
+				This example would only check for cross references embedded within <code>##</code> markers, for example <code>#paragraph#</code>. Even more, <code>--crossref-format</code> takes regex expression, so you can become very creative. For example, to change markers to <code>#</code> and make them optional, you'd use <code>--crossref-format "#?%@#?"</code> instead. Make sure you don't forget to include <code>%@</code> placeholder - this is replaced with actual cross reference matching regexes for various types of links!</p>
+				
+				<p><strong>Important:</strong> Take care when specifying custom markers - make sure you don't use one of the <a href="comments.html#formatting">formatting markers</a> (<code>*</code>, <code>_</code> and similar); although appledoc will not warn you about it, results are unpredictable and either cross reference or format will not be recognized. Also make sure to not use capturing parenthesis (this is especially important for starting marker)! Cross references matching relies on exact capture group numbers for finding specific parts of reference (like object and method for remote members), so introducing new capturing parenthesis would break that! But you can use non-capturing parenthesis <code>(?:...)</code> if needed.</p>
+
+				<p><strong>Note:</strong> <code>--crossref-format</code> and <code>--explicit-crossref</code> cmd line switches are mutually exclusive! Internally, appledoc uses <code>&lt;?%@&gt;?</code> for cross references matching, which makes markers optional. Using <code>--explicit-crossref</code> is equal to using <code>--crossref-format "&lt;%@&gt;"</code> and is in fact just a convenience shortcut for it! If you use both options in command line, the last one found will be used!</p>
+				
+				<p><strong>Note:</strong> Note that you must use quotes with <code>--crossref-format</code> even if no whitespace is included with the option!</p>
+				
+				
+				
+				<a name="inspectCmdLine"></a>
+				<h3>Inspect generated HTML or documentation set files</h3>
+				<p>appledoc output generation works in several steps (i.e. generate HTML, generate docset, install docset). Each step output files are used as source for next step. For performance reasons, files are moved instead of copied between these steps by default. Although this makes appledoc more efficient, it may seem strange to see output folder empty when appledoc finishes. If so, just think of --output switch as the path to temporary files used during generation. In most cases these intermediate files are not needed and are later removed manually anyway. However there are occasions where you'd want to inspect output; debugging or archiving for example. You can tell appledoc to copy instead of move like this:
+<pre>appledoc
+--project-name appledoc
+--project-company "Gentle Bytes"
+--company-id com.gentlebytes
+--output ~/help
+--keep-intermediate-files
+.</pre>
+				Using this option all intermediate files (i.e. HTML and docset files, including docset description XML files) are kept in output path.</p>
+				<p>Alternatively you can tell appledoc to only create HTML files:
+<pre>appledoc
+--project-name appledoc
+--project-company "Gentle Bytes"
+--company-id com.gentlebytes
+--output ~/help
+--no-create-docset
+.</pre>
+				By adding <code>--no-create-docset</code> you instruct appledoc to create HTML and then quit. Using this command line, you'll find HTML files in ~/help/html.
+				</p>
+				<p>Similarly you can tell appledoc to create docset but not install it:
+<pre>appledoc
+--project-name appledoc
+--project-company "Gentle Bytes"
+--company-id com.gentlebytes
+--output ~/help
+--no-install-docset
+.</pre>
+				Using this command line you'll find docset files in ~/help/docset. The docset is already indexed with all description xml files used for indexing left so you can inspect them. Note that in this case, html directory is moved inside ~/help/docset which effectively removes it from output path.</p>
+				<p>You can also disable HTML files generation by using <code>--no-create-html</code> switch. This effectively disables any output generation and only invokes source code parsing and comments processing. As generation phase takes most time (typically more than 90%!), this option is useful for quick validation of your comments for unknown cross references and similar. It may come handy to include it as a regular build phase for larger targets to validate your comments and then manually invoke generation before releasing.</p>
+							
 			</div>
 			
 			
