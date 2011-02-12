@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />		
+	<title>appledoc @ GitHub</title>
+	<link rel="stylesheet" type="text/css" media="screen" href="styles.css"  />
+</head>
+
+<body>
+	<article id="contents" role="main">
+		<div id="header">
+			<div id="download">
+			  <a href="http://github.com/tomaz/appledoc/zipball/master">
+			    <img width="90" src="http://github.com/images/modules/download/zip.png"></a>
+			  <a href="http://github.com/tomaz/appledoc/tarball/master">
+			    <img width="90" src="http://github.com/images/modules/download/tar.png"></a>
+			</div>
+			<a href="http://github.com/tomaz/appledoc"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+			<h1>appledoc</h1>
+			<p>Objective-C documentation set generator.</p>
+		</div>
+		<div id="container">
+			<h2>Adding static documentation</h2>
+			<div class="cmdlineexamplesection">
+			<p>This section contains examples and explanation of how you can include documents other than source code documentation, such as companion guides and similar as well as different media - images, videos or whatever else you may find appropriate.</p>
+			
+				<a name="includeDocuments"></a>
+				<h3>Include companion guides and other documentation</h3>
+				<p>appledoc can include arbitrary documentation from anywhere on your computer using <code>--include</code> command line switch(es) like this:
+<pre>appledoc
+--project-name appledoc
+--project-company "Gentle Bytes"
+--company-id com.gentlebytes
+--output ~/help
+--include ~/docs/eula.html
+--include ./docs/companion
+.</pre>
+				In this example, appledoc will copy file <code>eula.html</code> from <code>~/docs</code> directory and all files and subdirectories of <code>docs/companion</code> directory from current path to the resulting HTML and documentation set. You can give it as many <code>--include</code> switches as you'd like, each "points" to a file or directory. In any case, the file or the whole directory structure is copied over.</p>
+				
+				<a name="directoryStructure"></a>
+				<div class="warning">
+				<p><strong>Important:</strong> All included documentation is copied inside <code>docs</code> subdirectory within the output path (the same path where the index and hierarchy files are generated). If the path given with <code>--include</code> switch is a file, the file is copied directly inside <code>docs</code> folder. If the path is directory, a subdirectory with the name of last path component is created and contents are copied there. So if the <code>./docs/companion</code> directory from the above example contains a single file <code>somefile.html</code>, the above command line will result in the following directory structure at <code>~/help</code>:
+<pre>~/help/
+    index.html
+    hierarchy.html
+    ...
+    <strong>docs/
+        eula.html
+        companion/
+            somefile.html</strong>
+</pre>
+				If above example would use another include switch, let's say <code>--include ./docs/something/else</code>, the above directory structure would also include contents of <code>else</code> directory as the subdirectory of <code>docs</code>:
+<pre>~/help/
+    index.html
+    hierarchy.html
+    ...
+    docs/
+        eula.html
+        companion/
+            somefile.html
+        <strong>else/</strong>
+</pre>
+				
+				
+				<em>This is important to keep in mind, so that you can properly setup stuff like cross references in html files and similar! It also requires you to use unique names for every file or directory from <code>--include</code> switch!</em></p>
+				</div>
+				
+				<div class="warning">
+				<p><strong>Note:</strong> Although it's completely up to your preference where the files are stored, in most cases it makes sense to include project related documentation in project's subdirectory and also keep it under versioning system.</p>
+				</div>
+				
+				
+				<a name="templateDocuments"></a>
+				<h3>Using appledoc documentation style</h3>
+				<p>As above example demonstrated, you can easily create companion guides in the form of html files which are included in generated documentation. This is quite powerful by itself, but it's still lacking stuff like simple cross referencing from documents to source code documentation and vice versa. Although absolutely doable, it requires manually knowing exact paths to individual entities and this is error prone and can easily break if appledoc changes the way it generates output in the future. To overcome this, appledoc allows you to write documentation using the same syntax as the rest of the <a href="comments.html#formatting">code documentation</a>, including formatting directives, cross references and the rest of it!</p>
+				
+				<p>These files should be plain text documents and must use the same Markdown-like formatting as <a href="comments.html#formatting">standard source code comments</a>. As of the time of this writting, no Markdown syntax is implemented for headings, images etc., you need to use standard html tags like <code>&lt;h1&gt;</code>, <code>&lt;h1&gt;</code>, <code>&lt;img&gt;</code> etc. Of course you can include any valid html tag and it will be properly picked up for you! Here's an example of such document:
+				
+<pre>&lt;h1&gt;Main title&lt;/h1&gt;
+
+Some paragraph with *formatted* text.
+
+- list
+    1. sublist
+    2. anoter item
+- and another one
+
+You can include example blocks:
+
+    NSString *string;
+    string = @"hello";
+
+etc. etc. etc. - you get the point :)
+</pre>				
+				</p>
+				
+				<div class="warning">
+				<p><strong>Note:</strong> In order to achieve this, appledoc needs to post-process these files using the same logic used for post-processing "normal" source code comments. To give you control over which files need post-processing, you need to use special file names - specifically, you need to use <code>-template</code> suffix in the file name, for example <code>document1-template.html</code>. You don't have to explicitly include these files using <code>--include</code> switches, appledoc will recursively parse any directory you include for these files! For example, if you have:
+<pre>~/documentation
+    document1-template.html
+    something.css
+    subdir/
+        document2-template.markdown
+        another-file.html
+</pre>
+				and use <code>--include ~/documentation</code> in command line, appledoc will automatically pick up <code>document1-template.html</code> and <code>document2-template.markdown</code> and process them. Each template file is then copied to the same subdirectory as expected except that generated filename doesn't have <code>-template</code> suffix and always uses .html extension, regardless of the original file extension! So above would result in this structure inside output directory:
+<pre>~/help/
+    index.html
+    hierarchy.html
+    ...
+    docs/
+        documentation/
+            <strong>document1.html</strong>
+            something.css
+            subdir/
+                <strong>document2.html</strong>
+                another-file.html
+</pre>
+				</p>
+				</div>
+				
+				<div class="warning">
+				<p><strong>Important:</strong> Although you can include template documents anywhere in the directory structure, you must use unique names for all of them, so you can't have two <code>document1-template.html</code> files, even if you use different extension! Even if you include them with different <code>--include</code> switches! The reason is <a href="#crossReferencingDocuments">explaned below</a> :)</p>
+				</div>
+
+
+				<a name="crossReferencingDocuments"></a>
+				<h3>Cross referencing documents</h3>
+				<p>If you want to cross reference included documentation from your source code comments, just remember above mentioned <a href="#directoryStructure">generated directory structure</a> and use anchor tags to get to the desired file (or use <code>&lt;img&gt;</code> to embed an image for example!).</p>
+				
+				<p>But you can use simpler alternative for all <a href="#templateDocuments">template documents</a>: if any word matches document name without <code>-template</code> suffix and extension, it's automatically converted to cross reference to that document! To use above example, any <code>document1</code> word will be converted to cross reference to <code>docs/documentation.document1.html</code> and so on. This frees you from changing directory structure (appledoc will automatically detect proper href address!) and makes your documention more readable! You can use this to reference included documentation from source code comments or other included documents!</p>
+				
+				<p>Needless to say, this also works for cross referencing any class, category, protocol, method, property or arbitrary URL from your documents! Just use <a href="comments.html#crossReferences">the same syntax as normally</a>!</p>				
+			</div>
+
+			<p><a href="settings.html#examples">Back to settings</a></p>
+		</div>
+		<div id="aside">
+			<h2>Contents</h2>
+			<p>
+			<ul>
+				<li><a href="index.html">About</a></li>
+				<li><a href="comments.html">Comments</a></li>
+				<li><a href="settings.html">Settings</a></li>
+			</ul>
+			</p>
+		</div>
+		<div id="footer">
+			&copy; 2009-2010 <a href="http://gentlebytes.com">Gentle Bytes</a>. All rights reserved.
+		</div>
+	</article>
+	<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("UA-11836532-1");
+	pageTracker._trackPageview();
+	} catch(err) {}</script>
+</body>
+
+</html>

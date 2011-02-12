@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />		
+	<title>appledoc @ GitHub</title>
+	<link rel="stylesheet" type="text/css" media="screen" href="styles.css"  />
+</head>
+
+<body>
+	<article id="contents" role="main">
+		<div id="header">
+			<div id="download">
+			  <a href="http://github.com/tomaz/appledoc/zipball/master">
+			    <img width="90" src="http://github.com/images/modules/download/zip.png"></a>
+			  <a href="http://github.com/tomaz/appledoc/tarball/master">
+			    <img width="90" src="http://github.com/images/modules/download/tar.png"></a>
+			</div>
+			<a href="http://github.com/tomaz/appledoc"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+			<h1>appledoc</h1>
+			<p>Objective-C documentation set generator.</p>
+		</div>
+		<div id="container">
+			<h2>Basic command line examples</h2>
+			<div class="cmdlineexamplesection">
+				<p>Find some examples of command line usage below. Each command line switch is written in it's own line to make the output more readable; switches should be delimited with space normally!</p>
+				
+				<a name="minimumCmdLine"></a>
+				<h3>Minimum command line</h3>
+				<p>
+<pre>appledoc
+--project-name appledoc
+--project-company "Gentle Bytes"
+--company-id com.gentlebytes
+--output ~/help
+.</pre>
+				Parses files from current directory and generates HTML files in the given output path. HTML files are then used to generate documentation set (in given output path) and this is finally moved to shared folder where Xcode searches documentation sets. Xcode is also instructed to reload documentation, so any change is immediately visible.</p>
+				
+				
+				<a name="multipleSourcesCmdLine"></a>
+				<h3>Parsing from multiple locations</h3>
+				<p>All command line arguments after the last switch are considered as source paths. Each path is validated and as long as all are valid directory or file names, appledoc uses them for parsing. If the path is directory, it's recursively parsed for all source files. If path is file, it's parsed as source file:
+<pre>appledoc
+--project-name appledoc
+--project-company "Gentle Bytes"
+--company-id com.gentlebytes
+--output ~/help
+~/Projects/Common
+~/Projects/Frameworks/SomeHeader.h
+~/Projects/Frameworks/AnotherFile.m
+.</pre>
+				This extends previous example by including all files from ~/Projects/Common directory and it's subdirectories and ~/Projects/Frameworks/SomeHeader.h and ~/Projects/Frameworks/AnotherFile.m files besides the files from current directory.</p>			
+				<p>This allows you to include files regardless of where they reside on your computer. For example, it may be used to include headers from frameworks or libraries your project uses or simply to only parse a subset of your project files.</p>
+				
+				
+				<a name="ignoreCmdLine"></a>
+				<h3>Ignore paths</h3>
+				<p>You can instruct appledoc to ignore any number of paths or files using <code>--ignore</code> switches. This is useful if your project includes third party source files for example (it's much easier to put these files into a subfolder to simplify ignoring):
+<pre>appledoc
+--project-name appledoc
+--project-company "Gentle Bytes"
+--company-id com.gentlebytes
+--output ~/Projects/Help/appledoc
+--ignore Common
+--ignore .m
+.</pre>
+				Using this command line would effectively ignore all files in ./Common including all subdirectories. Additionally it would ignore all files and directories with extension .m.</p>
+				<p>Each --ignore switch takes a single path that should be ignored while parsing. It works very simply: each directory or file found in the given source paths (. in this case) is checked and if it ends with one of the ignore values, the path is skipped. Or put in other words: <code>[NSString hasSuffix:]</code> is sent to each source file or directory to validate ignored files.</p>
+
+				<div class="warning">
+				<p><strong>Important:</strong> Note that --ignore strings don't accept * and ? chars for unknown chars matching! However if the string starts with a star (*), the star is removed, so <code>--ignore *.m</code> is internally translated to <code>--ignore .m</code> for your convenience. But star in the middle doesn't work, so this <code>--ignore path/subpath/*.m</code> would not ignore all .m files in path/subpath as expected - in fact, it would only match files or directories which names end with path/subpath/*.m!</p>
+				</div>
+			</div>
+			
+			<p><a href="settings.html#examples">Back to settings</a></p>
+		</div>
+		<div id="aside">
+			<h2>Contents</h2>
+			<p>
+			<ul>
+				<li><a href="index.html">About</a></li>
+				<li><a href="comments.html">Comments</a></li>
+				<li><a href="settings.html">Settings</a></li>
+			</ul>
+			</p>
+		</div>
+		<div id="footer">
+			&copy; 2009-2010 <a href="http://gentlebytes.com">Gentle Bytes</a>. All rights reserved.
+		</div>
+	</article>
+	<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("UA-11836532-1");
+	pageTracker._trackPageview();
+	} catch(err) {}</script>
+</body>
+
+</html>
