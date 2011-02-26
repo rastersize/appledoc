@@ -75,9 +75,10 @@
 				<h3>Using appledoc documentation style</h3>
 				<p>As above example demonstrated, you can easily create companion guides in the form of html files which are included in generated documentation. This is quite powerful by itself, but it's still lacking stuff like simple cross referencing from documents to source code documentation and vice versa. Although absolutely doable, it requires manually knowing exact paths to individual entities and this is error prone and can easily break if appledoc changes the way it generates output in the future. To overcome this, appledoc allows you to write documentation using the same syntax as the rest of the <a href="comments.html#formatting">code documentation</a>, including formatting directives, cross references and the rest of it!</p>
 				
-				<p>These files should be plain text documents and must use the same Markdown-like formatting as <a href="comments.html#formatting">standard source code comments</a>. As of the time of this writting, no Markdown syntax is implemented for headings, images etc., you need to use standard html tags like <code>&lt;h1&gt;</code>, <code>&lt;h1&gt;</code>, <code>&lt;img&gt;</code> etc. Of course you can include any valid html tag and it will be properly picked up for you! Here's an example of such document:
+				<p>These files should be plain text documents and must use the same Markdown-like formatting as <a href="comments.html#formatting">standard source code comments</a>. As appledoc supports full Markdown syntax (<a href="http://www.pell.portland.or.us/~orc/Code/discount/">extended actually</a>), you can use headings, include images (as long as they are stored within one of the included paths, they are copied over to the output, <a href="#directoryStructure">see here</a> for details of how files are copied, so you can determine the path). Of course you can include any valid html tag and it will be properly picked up for you! Here's an example of such document:
 				
-<pre>&lt;h1&gt;Main title&lt;/h1&gt;
+<pre>Main title
+==========
 
 Some paragraph with *formatted* text.
 

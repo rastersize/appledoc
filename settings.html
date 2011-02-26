@@ -25,8 +25,9 @@
 			<h2>Settings and parameters</h2>
 			<p>appledoc has been designed to keep the command line as simple as possible. On the other hand, it offers many command line swithces as parameters for you to refine generated output. However only a handful of these parameters are unique from project to project, most of them are common to many projects - company name, documentation set information, etc. To strike the balance, appledoc uses sensible defaults plus it allows you specify common parameters as global settings. In fact, there are three layers of settings:
 			<ul>
-				<li>Factory defaults: These are "hard-wired" into appledoc code and are designed to be as reusable as possible.</li>
-				<li>Global settings: Some of the defaults cannot be pre-configured, but are ussually common to many of the projects; company name for example. Global settings override factory defaults.</li>
+				<li>Factory defaults: These are "hard-wired" into appledoc code and are designed to be as useful as possible.</li>
+				<li>Global settings: Some of the defaults cannot be pre-configured, but are usually common to many of the projects; company name for example. Global settings override factory defaults.</li>
+				<li>Project settings: Similar to global settings, project settings allow you to specify appledoc arguments through a file instead of command line.</li>
 				<li>Command line arguments: You can override factory defaults and global settings through command line arguments.</li>
 			</ul>
 			You can change all parameters provided by appledoc through any of the above mentioned layers. To discover what settings are available, use: <pre>appledoc --help</pre> Most switches require a parameter of certain type as indicated in help output. Boolean switches don't use parameter on the other hand; they can be prefixed with <code>--no-</code> string to opt them out; see appledoc help output to identify these switches. This is especially useful to disable factory default or global setting. For example: to enable doc set installation, you would use <code>--install-docset</code>, and to disable it: <code>--no-install-docset</code>.
@@ -48,7 +49,7 @@
 				<li>All other settings should be strings or numbers - depending the value, check <code>appledoc --help</code> for details.</li>
 			</ul>
 			An example of the plist file:
-<pre>&lt;?xml version="1.0" encoding="UTF-8"&gt;
+<pre>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" 
 	"http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
 &lt;plist version="1.0"&gt;
@@ -75,6 +76,49 @@
 &lt;/dict&gt;
 &lt;/plist&gt;</pre>
 			Most commonly used global settings include <code>--project-company</code>, <code>--company-id</code>, <code>--verbose</code>, <code>--logformat</code> and similar. These are all settings that are ussually constant between the projects and would otherwise require repeating command line swithces on everry run. Of course you can still override them on specific projects if needed!</p>
+			
+			
+			
+			<a name="projectSettings"></a>
+			<h2>Project settings</h2>
+			<p>Project settings are similar to global settings. In fact, they use exactly the same file format, so <a href="#globals">above information</a> applies here as well. There are three main differences:
+			<ul>
+				<li>Project settings don't use special command line switch; instead you simply specify the path to the settings file or directory including the file, the same way as any other source path.</li>
+				<li>Project settings file allows you specifying any number of input paths.</li>
+				<li>Project settings file allows you specifying templates path.</li>
+			</ul>
+			
+			Let's see these in detail. Every directory given to appledoc <a href="settings-basic.html#projectSettings">command line</a>, after all the switches, is checked for <code>AppledocSettings.plist</code> file. If found, the file is considered as project settings and it's parameters are injected to appledoc settings. The same path is also used to search for source files, so you don't have to list any input files within settings in this case. If you'd like to use a different name, you can specify the path to the project settings file; in such case you can use any filename, but you must use .plist extension and must include at least one input path, either through the settings or with another command line arguments.</p>
+			
+			<p>You can embed input paths directly within project settings file to even further simplify command line. This setting is specific to project settings files and can only be used here (using it in global templates or command line will result in runtime errors!). Here's an example:
+<pre>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" 
+	"http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+	&lt;key>--input&lt;/key&gt;
+	&lt;array&gt;
+		&lt;string>~/External/Path&lt;/string&gt;
+		&lt;string>/usr/local/include&lt;/string&gt;
+		&lt;string>.&lt;/string&gt;
+		&lt;string>../src&lt;/string&gt;
+		&lt;string>./MyFile.h&lt;/string&gt;
+		&lt;string>MyFile.h&lt;/string&gt;
+	&lt;/array&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;</pre>
+			
+			As you can see, you can use any number of paths here. There are subtle differences of how these paths are handled though:
+			<ul>
+				<li>If a path starts with ~ or /, it is considered as absolute and is used exactly as typed. These are the first two strings in above example.</li>
+				<li>Any other path is considered relative to the directory where the project setting file is found. Such a path is appended to the directory. These include paths starting with . or .. as shown in the last 4 strings in the above example.</li>
+			</ul>
+			</p>
+			
+			<p>Finally, project settings allow you specifying <code>--templates</code> parameter so you can use arbitrary location for your template files. This is useful if you'd like to include templates with your project files, so that your users wouldn't need to copy them to predefined locations.</p>
+			
+			<p>See also project settings <a href="settings-basic.html#projectSettings">command line examples</a>.</p>
+			
 			
 			
 			<a name="placeholders"></a>

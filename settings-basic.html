@@ -70,6 +70,21 @@
 				<div class="warning">
 				<p><strong>Important:</strong> Note that --ignore strings don't accept * and ? chars for unknown chars matching! However if the string starts with a star (*), the star is removed, so <code>--ignore *.m</code> is internally translated to <code>--ignore .m</code> for your convenience. But star in the middle doesn't work, so this <code>--ignore path/subpath/*.m</code> would not ignore all .m files in path/subpath as expected - in fact, it would only match files or directories which names end with path/subpath/*.m!</p>
 				</div>
+				
+				
+				<a name="projectSettings"></a>
+				<h3>Project settings</h3>
+				<p>You can use <a href="settings.html#projectSettings">project settings</a> file for specifying appledoc parameters:
+<pre>appledoc .</pre>
+				This command line would check current directory for a file <code>AppledocSettings.plist</code>. If found, the file would be read in and all parameters from it used for generating the documentation. Note that current dir would also be searched for any source file.</p>
+				
+				<p>If you'd like to use different file name, you can also use this:
+<pre>appledoc ~/path/project.plist</pre>
+				This reads in the given file and applies all parameters from it. You have freedom to choose any file name this way, but you must use .plist extension in order for appledoc distinguish it from a source file. Note that in this case, the settings file must contain at list one input path. If not, you must include at least one path through command line; for example:
+<pre>appledoc ~/path/project.plist ~/MyProject</pre>
+				</p>
+				 
+				 <p>Read more about project settings <a href="settings.html#projectSettings">here</a>.</p>
 			</div>
 			
 			<p><a href="settings.html#examples">Back to settings</a></p>

@@ -47,7 +47,7 @@
 			
 			<a name="formatting"></a>
 			<h2>Formatting text</h2>
-			<p>appledoc has been designed to keep comments in source code as readable as possible. In order to achieve this, it uses <a href="http://daringfireball.net/projects/markdown/">Markdown</a>-like syntax and extract as much information from the comment surrounding context.</p>
+			<p>appledoc has been designed to keep comments in source code as readable as possible. In order to achieve this, it uses <a href="http://daringfireball.net/projects/markdown/">Markdown</a>-like syntax and extract as much information from the comment surrounding context. Internally it uses <a href="http://www.pell.portland.or.us/~orc/Code/discount/">Discount</a> for processing Markdown, which supports a set of extensions to original Markdown; check the link for more details.</p>
 
 
 			<a name="emphasis"></a>
@@ -101,8 +101,30 @@ property value.</pre>
 method [GBClass runWithValue:afterDelay] and
 property [GBClass value]</pre>
 			Will convert to something like:
-			<div class="marker">This text contains links to: method <a href="#">[GBClass runWithValue:afterDelay]</a> and property <a href="#">[GBClass value]</a></div></p>			
+			<div class="marker">This text contains links to: method <a href="#">[GBClass runWithValue:afterDelay]</a> and property <a href="#">[GBClass value]</a></div></p>
+			
+			
+			<a name="link-description"></a>
+			<h3>Custom link descriptions</h3>
+			<p>You can also use Markdown like link syntax. This gives you the freedom of using arbitrary description. For example:
+<pre>For more info check [this page](http://gentlebytes.com)
+or [this one](http://gentlebytes.com "title").</pre>
+			is converted to something like:
+			<div class="marker">For more info check <a href="#">this page</a> or <a href="#">this one</a>.</div>
+			
+			The address is checked for object cross reference, so you can also do this:
+<pre>See [this class](Class) or [this method]([GBClass method:]) for details.</pre>
+			As long <code>Class</code> and <code>[GBClass method:]</code> are valid cross references, this is converted to:
+			<div class="marker">See <a href="#">this class</a> or <a href="#">this method</a> for details.</div>
+			
+			You can also use reference type links like this:
+<pre>See [this class][1].
 
+[1]: Class</pre>
+			Which is properly converted to:
+			<div class="marker">See <a href="#">this class</a>.</div>
+			</p>
+			
 
 
 			<a name="paragraph"></a>
@@ -171,7 +193,7 @@ A different paragraph.</pre>
     		
     		<a name="example"></a>
     		<h3>Examples and code blocks</h3>
-    		<p>If you want to mark a block of text as an example, simply prefix each line with a tab. appledoc will automatically convert consequtive blocks of tab prefixed lines into a single code block. Similar to lists and other paragraph blocks, example section needs to be delimited from preceeding and following paragraph with an empty line:
+    		<p>If you want to mark a block of text as an example, simply prefix each line with a tab or 4 (or more) spaces. appledoc will automatically convert consequtive blocks of tab prefixed lines into a single code block. Similar to lists and other paragraph blocks, example section needs to be delimited from preceeding and following paragraph with an empty line:
 <pre>Normal paragraph text
 
 	First line of example
