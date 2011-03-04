@@ -220,7 +220,12 @@ Another paragraph.
     		<h2>Miscellaneous</h2>
     		<p>
     		<ul>
-    			<li><code>@see &lt;name&gt;</code> or <code>@sa &lt;name&gt;</code>: See also (cross reference) link. Although you can provide cross reference links anywhere within the paragraph text, as described above, you need to use these directives to provide related context links for documentation set. The name should follow cross reference guidelines described above.</li>
+    			<li><code>@see &lt;name&gt;</code> or <code>@sa &lt;name&gt;</code>: See also (cross reference) link. Although you can provide cross reference links anywhere within the paragraph text, as described above, you need to use these directives to provide related context links for documentation set. The name should follow cross reference guidelines described above.
+    			
+    				<div class="warning">
+    				<strong>Note:</strong> Methods and properties keep all cross references in generated HTML, regardless of the referenced object. But when @see is used inside class, category or protocol comment, all cross references to other objects or members are ignored. However any cross reference to a <a href="settings-documents.html#templateDocuments">template document</a> is converted into companion guide link in the table below the main title. Oh, and <a href="#link-description">remember</a>, you can use nice descriptions using Markdown syntax, for example: <code>[String Programming Guide](document1)</code>.
+    				</div>
+    			</li>
     			<li><code>@name &lt;title&gt;</code>: The title of the methods and/or properties group. All methods and properties declared after @name directive will be stored into a group with the given title. These groups are then extracted as tasks. <strong>Important:</strong> @name must be specified in it's own separate comment preceeding the first method or property comment for which the task is specified! So this would work:
 <pre>/** @name Section title */
 
