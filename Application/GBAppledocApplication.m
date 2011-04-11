@@ -129,6 +129,21 @@ static NSString *kGBArgHelp = @"help";
 
 #pragma mark Initialization & disposal
 
+----------------------------------------------------------------------------------------------------
+Switching main development to master branch due to confusion with new users - GitHub users expect
+to have master branch as the front-most branch. Development branch will remain for some time, so
+that existing users (you :) have time to switch, but will then be probably deleted. This message
+is written outside comments so that it will generate compile errors to get your attention to the
+matter.
+
+To switch to master branch and get latest update, open terminal and type:
+
+git checkout master
+git pull
+
+Sorry for the inconvenience...
+----------------------------------------------------------------------------------------------------
+
 - (id)init {
 	self = [super init];
 	if (self) {
