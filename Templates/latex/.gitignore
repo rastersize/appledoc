@@ -1,0 +1,16 @@
+*.log
+*.snm
+*.nav
+*.toc
+*.bbl
+*.blg
+*.aux
+*.synctex.gz
+*.synctex.gz*
+*.out
+*.lot
+*.lof
+*.ist
+*.xdy
+*.acn
+*.pdf

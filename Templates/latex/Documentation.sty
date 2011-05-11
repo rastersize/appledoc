@@ -1,0 +1,114 @@
+\ProvidesPackage{Documentation}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}				% See geometry.pdf to learn the layout options. There are lots.
+\usepackage[parfill]{parskip}		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{epstopdf}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{units}
+\usepackage{listings}
+\usepackage{subfigure}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{fancyhdr}
+\usepackage{fncychap}
+\usepackage{appendix}
+\usepackage{url}
+\usepackage[nodayofweek, ddmmyyyy]{datetime}
+\usepackage{titlesec}
+\usepackage{mdwlist}
+\usepackage{microtype}
+\usepackage{lettrine}
+\usepackage{eso-pic}
+\usepackage{pdflscape}
+\usepackage{pdfpages}
+\usepackage{afterpage}
+\usepackage{longtable}
+\usepackage{helvet}
+\usepackage{courier}
+
+
+% Change the default font family to sans-serif (i.e. Helvetica or Arial)
+\renewcommand{\familydefault}{\sfdefault}
+
+% ISO Date (Like "2010-04-16")
+\renewcommand{\dateseparator}{-}
+\newcommand{\todayiso}{\the\year \dateseparator \twodigit\month \dateseparator \twodigit\day}
+
+% Make the date on the frontpage normal font size  and ISO style.
+\date{\normalsize{\todayiso}}
+
+% Make sure the headers are aligned and chapters only take up on row
+\titleformat{\chapter}[hang]{\Huge}{\thechapter}{1cm}{}
+\titleformat{\section}[hang]{\huge}{\thesection}{.49cm}{}
+\titleformat{\subsection}[hang]{\Large}{\thesubsection}{.39cm}{}
+
+\titlespacing{\part}{0pt}{-1.5cm}{2cm}
+\titlespacing{\chapter}{0pt}{-1.5cm}{1.25cm}
+\titlespacing{\subsubsection}{0pt}{0cm}{0cm}
+
+% Fancyheader shortcuts
+\newcommand{\setspecialhdr}{%
+	\fancyhead[L]{ }%
+	\fancyhead[R]{\slshape \leftmark}%
+	\fancyfoot[C]{\thepage}%
+}
+
+% Colors
+\definecolor{Chapter}{RGB}{0,0,0}
+\definecolor{Section}{RGB}{60,76,108}
+\definecolor{SubSection}{RGB}{0,0,0}
+\definecolor{SubSubSection}{RGB}{0,0,0}
+
+\definecolor{WarningBoxBackground}{RGB}{240,243,247}
+\definecolor{WarningBoxBorder}{RGB}{80,136,197}
+\definecolor{WarningBoxText}{RGB}{0,0,0}
+
+\definecolor{Link}{RGB}{51,102,204}
+
+\definecolor{Class}{RGB}{102,102,102}
+\definecolor{Method}{RGB}{102,102,102}
+\definecolor{DeclaredIn}{RGB}{102,102,102}
+\definecolor{DeclaredIn}{RGB}{102,102,102}
+\definecolor{Property}{RGB}{153,153,102}
+\definecolor{Required}{RGB}{153,153,102}
+\definecolor{Deprecated}{RGB}{250,0,0}
+\definecolor{DeclaredIn}{RGB}{102,102,102}
+
+% Custom commands
+\newcommand{\cchapter}[1]{\chapter{\textcolor{Chapter}{#1}}}
+\newcommand{\csection}[1]{\section{\textcolor{Section}{#1}}}
+\newcommand{\csubsection}[1]{\subsection{\textcolor{SubSection}{#1}}}
+\newcommand{\csubsubsection}[1]{\subsubsection{\textcolor{SubSubSection}{#1}}}
+
+\newcommand{\code}[1]{\mbox{\texttt{#1}}}
+\newcommand{\class}[1]{\code{#1}}
+\newcommand{\protocol}[1]{\code{#1}}
+\newcommand{\category}[1]{\code{#1}}
+\newcommand{\method}[1]{\code{#1}}
+\newcommand{\classmethod}[1]{\code{#1}}
+\newcommand{\property}[1]{\code{#1}}
+\newcommand{\constant}[1]{\code{#1}}
+\newcommand{\type}[1]{\code{#1}}
+\newcommand{\parameter}[1]{\code{#1}}
+\newcommand{\exception}[1]{\constant{#1}}
+\newcommand{\propertySuffix}[1]{\text{\textcolor{Property}{\hspace{.2cm}\textit{#1}}}}
+\newcommand{\requiredSuffix}[1]{\text{\textcolor{Required}{\hspace{.2cm}\textit{#1}}}}
+\newcommand{\deprecatedSuffix}[1]{\text{\textcolor{Deprecated}{\textbf{#1}}}}
+\newcommand{\declaredin}[1]{\text{\textcolor{DeclaredIn}{#1}}}
+
+
+\newcommand{\warning}[1]{%
+	{
+		\fboxsep=.667em
+		\fcolorbox{WarningBoxBorder}{WarningBoxBackground}{\parbox{\textwidth}{
+			\textcolor{WarningBoxText}{#1}
+		}}
+	}
+}
+
+
+

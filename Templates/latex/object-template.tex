@@ -1,0 +1,154 @@
+\cleardoublepage
+\phantomsection
+\chapter{{{page/title}}}
+\label{api/objects/{{page/title}}}
+
+{{#page/specifications}}
+{{#used}}\begin{tabular*}{\textwidth}{@{\extracolsep{1cm}}  l p{\textwidth - 4cm} l }{{/used}}
+{{#values}}{{>ObjectSpecification}}{{/values}}
+{{#used}}\end{tabular*}{{/used}}
+{{/page/specifications}}
+					
+{{#object/comment}}
+{{#hasLongDescription}}
+\section{{{strings/objectOverview/title}}}
+\label{api/objects/{{page/title}}/Overview}
+{{#longDescription}}{{>GBCommentComponentsList}}{{/longDescription}}
+{{/hasLongDescription}}
+{{/object/comment}}
+					
+{{#object/methods}}
+{{#hasSections}}
+\section{{{strings/objectTasks/title}}}
+\label{api/objects/{{page/title}}/Tasks}
+{{#sections}}
+{{>TaskTitle}}
+{{#sectionName}}\label{api/ojbects/{{page/title}}/Tasks/{{#sectionName}}{{.}}{{/sectionName}}}{{/sectionName}}
+{{#methods}}
+\begin{list}{}{\leftmargin=.5cm}
+	{{>TaskMethod}}
+\end{list}
+{{/methods}}
+
+{{/sections}}
+{{/hasSections}}
+{{/object/methods}}
+					
+{{#object/methods}}
+{{#hasProperties}}
+\section{{{strings/objectMethods/propertiesTitle}}}
+\label{api/objects/{{page/title}}/Properties}
+{{#properties}}
+	{{>Method}}
+{{/properties}}
+{{/hasProperties}}
+					
+{{#hasClassMethods}}
+\section{{{strings/objectMethods/classMethodsTitle}}}
+\label{api/objects/{{page/title}}/ClassMethods}
+{{#classMethods}}
+	{{>Method}}
+{{/classMethods}}
+{{/hasClassMethods}}
+					
+{{#hasInstanceMethods}}
+\section{{{strings/objectMethods/instanceMethodsTitle}}}
+\label{api/objects/{{page/title}}/InstanceMethods}
+{{#instanceMethods}}
+	{{>Method}}
+{{/instanceMethods}}
+{{/hasInstanceMethods}}
+{{/object/methods}}
+
+
+Section Method
+\subsection{{{methodSelector}}}
+\label{{{htmlReferenceName}}}
+{{#comment}}
+{{#hasShortDescription}}
+	{{#shortDescription}}{{>GBCommentComponent}}{{/shortDescription}}
+{{/hasShortDescription}}
+
+\begin{verbatim}
+{{>MethodDeclaration}}
+\end{verbatim}
+
+{{#hasMethodParameters}}
+\subsubsection{{{strings/objectMethods/parametersTitle}}}
+\begin{description}
+{{#methodParameters}}
+	\item[\parameter{{{argumentName}}}] \hfill \\  {{#argumentDescription}}{{>GBCommentComponentsList}}{{/argumentDescription}}
+{{/methodParameters}}
+\end{description}
+{{/hasMethodParameters}}
+	
+{{#hasMethodResult}}
+\subsubsection{{{strings/objectMethods/resultTitle}}}
+	{{#methodResult}}{{>GBCommentComponentsList}}{{/methodResult}}
+{{/hasMethodResult}}
+	
+{{#hasLongDescription}}
+\subsubsection{{{strings/objectMethods/discussionTitle}}}
+	{{#longDescription}}{{>GBCommentComponentsList}}{{/longDescription}}
+{{/hasLongDescription}}
+	
+{{#hasMethodExceptions}}
+\subsubsection{{{strings/objectMethods/exceptionsTitle}}}
+\begin{description}
+{{#methodExceptions}}
+	\item[\exception{{{argumentName}}}]\hfill \\  {{#argumentDescription}}{{>GBCommentComponentsList}}{{/argumentDescription}}
+{{/methodExceptions}}
+\end{description}
+{{/hasMethodExceptions}}
+	
+{{#hasRelatedItems}}
+\subsubsection{{{strings/objectMethods/seeAlsoTitle}}}
+\begin{list}{}{\leftmargin=.5cm}
+	{{#relatedItems/components}}
+	\list \hyperlink{//api/name/{{>GBCommentComponent}}}{\code{{{>GBCommentComponent}}}}
+	{{/relatedItems/components}}
+\end{list}
+{{/hasRelatedItems}}
+	
+{{#prefferedSourceInfo}}
+\subsubsection{{{strings/objectMethods/declaredInTitle}}}
+	\declaredin{{{filename}}}
+{{/prefferedSourceInfo}}
+{{/comment}}
+
+EndSection
+
+Section MethodDeclaration
+{{#formattedComponents}}{{#emphasized}}\emph{{{/emphasized}}{{#href}}\hyperlink{{{&href}}}{{{/href}}{{value}}{{#href}}}{{/href}}{{#emphasized}}}{{/emphasized}}{{/formattedComponents}}
+EndSection
+
+
+Section TaskTitle
+{{#hasMultipleSections}}\subsection{{{#sectionName}}{{.}}{{/sectionName}}{{^sectionName}}{{strings/objectTasks/otherMethodsSectionName}}{{/sectionName}}}{{/hasMultipleSections}}
+{{^hasMultipleSections}}{{#sectionName}}\subsection{{{.}}}{{/sectionName}}{{/hasMultipleSections}}
+EndSection
+
+Section TaskMethod
+\item \hyperlink{{{htmlReferenceName}}}{{{>TaskSelector}}}
+	{{#isProperty}}\propertySuffix{{{strings/objectTasks/property}}}{{/isProperty}}
+	{{#isRequired}}\requiredSuffix{{{strings/objectTasks/requiredMethod}}}{{/isRequired}}
+EndSection
+
+Section TaskSelector
+{{#isInstanceMethod}}- {{/isInstanceMethod}}{{#isClassMethod}}+ {{/isClassMethod}}{{#isProperty}}  {{/isProperty}}{{methodSelector}}
+EndSection
+
+
+Section GBCommentComponentsList
+{{#components}}{{>GBCommentComponent}}{{/components}}
+EndSection
+
+Section GBCommentComponent
+{{&textValue}}
+EndSection
+
+Section ObjectSpecification
+\noalign{\smallskip}
+	\textbf{{{title}}} & {{#values}}{{#href}}\href{{{&href}}}{{{/href}}{{string}}{{#href}}}{{/href}}{{&delimiter}}{{/values}} \\
+\noalign{\smallskip}
+EndSection

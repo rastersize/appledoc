@@ -1,0 +1,35 @@
+{{#hasClasses}}
+\section{{{strings/hierarchyPage/classesTitle}}}
+\label{hierarchy/classes}
+	{{>Classes}}
+{{/hasClasses}}
+
+{{#hasProtocols}}
+\section{{{strings/hierarchyPage/protocolsTitle}}}
+\label{hierarchy/protocols}
+\begin{itemize}
+{{#protocols}}
+	\list \hyperlink{{{href}}}{{{title}}}
+{{/protocols}}
+\end{itemize}
+{{/hasProtocols}}
+
+{{#hasCategories}}
+\section{{{strings/hierarchyPage/categoriesTitle}}}
+\label{hierarchy/categories}
+\begin{itemize}
+{{#categories}}
+	\list \hyperlink{{{href}}}{{{title}}}
+{{/categories}}
+\end{itemize}
+{{/hasCategories}}
+
+Section Classes
+{{#hasClasses}}
+	\begin{itemize}
+	{{#classes}}
+		\list {{#href}}\hyperlink{{{href}}}{{{/href}}{{name}}{{#href}}}{{/href}}{{>Classes}}
+	{{/classes}}
+	\end{itemize}
+{{/hasClasses}}
+EndSection
