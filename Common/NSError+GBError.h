@@ -37,5 +37,10 @@ enum {
 	GBErrorDocSetNodesTemplateMissing,
 	GBErrorDocSetUtilIndexingFailed,
 	GBErrorDocSetXcodeReloadFailed,
+	
+	GBErrorLatexObjectTemplateMissing = 10000,
+	GBErrorLatexDocumentTemplateMissing,
+	GBErrorLatexIndexTemplateMissing,
+	GBErrorLatexHierarchyTemplateMissing,
 };
 typedef NSUInteger GBErrorCode;
