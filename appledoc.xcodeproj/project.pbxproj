@@ -211,6 +211,8 @@
 		73FC741D11FE215E00AAD0B9 /* GBMethodData.m in Sources */ = {isa = PBXBuildFile; fileRef = 73FC741C11FE215E00AAD0B9 /* GBMethodData.m */; };
 		73FC742D11FE274300AAD0B9 /* GBMethodArgument.m in Sources */ = {isa = PBXBuildFile; fileRef = 73FC742C11FE274300AAD0B9 /* GBMethodArgument.m */; };
 		8DD76F9C0486AA7600D96B5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08FB779EFE84155DC02AAC07 /* Foundation.framework */; };
+		9C3C36D1137A4D830096D107 /* GBTemplateVariablesProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3C36D0137A4D820096D107 /* GBTemplateVariablesProvider.m */; };
+		9C3C36D2137A4D830096D107 /* GBTemplateVariablesProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3C36D0137A4D820096D107 /* GBTemplateVariablesProvider.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -491,6 +493,9 @@
 		73FC743511FE2CEB00AAD0B9 /* GBMethodDataTesting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBMethodDataTesting.m; sourceTree = "<group>"; };
 		8DD76FA10486AA7600D96B5E /* appledoc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = appledoc; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C3C36CA137A325E0096D107 /* latex */ = {isa = PBXFileReference; lastKnownFileType = folder; path = latex; sourceTree = "<group>"; };
+		9C3C36CF137A4D820096D107 /* GBTemplateVariablesProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBTemplateVariablesProvider.h; sourceTree = "<group>"; };
+		9C3C36D0137A4D820096D107 /* GBTemplateVariablesProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBTemplateVariablesProvider.m; sourceTree = "<group>"; };
+		9C3C36D3137A50590096D107 /* GBTemplateVariablesProviderSubclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBTemplateVariablesProviderSubclass.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -697,6 +702,9 @@
 				73AA9F721253BF4000074152 /* GBGenerator.m */,
 				73D2524412A2ED610024F9F9 /* GBOutputGenerator.h */,
 				73D2524512A2ED610024F9F9 /* GBOutputGenerator.m */,
+				9C3C36D3137A50590096D107 /* GBTemplateVariablesProviderSubclass.h */,
+				9C3C36CF137A4D820096D107 /* GBTemplateVariablesProvider.h */,
+				9C3C36D0137A4D820096D107 /* GBTemplateVariablesProvider.m */,
 				73473D2F12A38B730011336C /* GBHTMLOutputGenerator.h */,
 				73473D3012A38B730011336C /* GBHTMLOutputGenerator.m */,
 				739AD62D1255D8CB00B642C3 /* GBHTMLTemplateVariablesProvider.h */,
@@ -1254,6 +1262,7 @@
 				73E1B7D4130BE72100E3D710 /* GBCommentsProcessor-RegistrationsTesting.m in Sources */,
 				73E1B7D6130BE7C000E3D710 /* GBCommentsProcessor-PreprocessingTesting.m in Sources */,
 				73E0CF46131047E700FAFEC0 /* GBCommentsProcessor-MarkdownTesting.m in Sources */,
+				9C3C36D2137A4D830096D107 /* GBTemplateVariablesProvider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1336,6 +1345,7 @@
 				73AF4ECC130938F3001152DB /* GBCommentComponentsList.m in Sources */,
 				73FAC0F9130BCB6F00F22475 /* GBCommentArgument.m in Sources */,
 				73C4C8611377DFF70024FA77 /* GBExitCodes.m in Sources */,
+				9C3C36D1137A4D830096D107 /* GBTemplateVariablesProvider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

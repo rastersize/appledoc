@@ -6,9 +6,26 @@
 //  Copyright 2011 Gentle Bytes. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "GBTemplateVariablesProvider.h"
 
+@class GBStore;
+@class GBApplicationSettingsProvider;
 
-@interface GBTemplateVariablesProvider (GBTemplateVariablesProviderSubclass)
+#pragma mark -
+
+/** 
+ 
+ */
+@interface GBTemplateVariablesProvider ()
+
+- (NSString *)hrefForObject:(id)object fromObject:(id)source;
 
 @end
+
+@interface GBTemplateVariablesProvider (SubclassReadonly)
+
+@property (readonly, retain) GBStore *store;
+@property (readonly, retain) GBApplicationSettingsProvider *settings;
+
+@end
+
