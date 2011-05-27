@@ -9,6 +9,7 @@
 #import "GBStore.h"
 #import "GBApplicationSettingsProvider.h"
 #import "GBHTMLOutputGenerator.h"
+#import "GBLatexOutputGenerator.h"
 #import "GBDocSetOutputGenerator.h"
 #import "GBDocSetInstallGenerator.h"
 #import "GBDocSetPublishGenerator.h"
@@ -56,6 +57,9 @@
 - (void)setupGeneratorStepsWithStore:(id)store {
 	// Setups all output generators. The order of these is crucial as they are invoked in the order added to the list. This forms a dependency where each next generator can use
 	GBLogDebug(@"Initializing generation steps...");
+	if (self.settings.createLatex) {
+		[self.outputGenerators addObject:[GBLatexOutputGenerator generatorWithSettingsProvider:self.settings]];
+	}
 	if (!self.settings.createHTML) return;
 	[self.outputGenerators addObject:[GBHTMLOutputGenerator generatorWithSettingsProvider:self.settings]];
 	if (!self.settings.createDocSet) return;
