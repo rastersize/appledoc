@@ -215,6 +215,8 @@
 		9C3C36CE137A38A00096D107 /* GBLatexOutputGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3C36CC137A35670096D107 /* GBLatexOutputGenerator.m */; };
 		9C3C36D1137A4D830096D107 /* GBTemplateVariablesProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3C36D0137A4D820096D107 /* GBTemplateVariablesProvider.m */; };
 		9C3C36D2137A4D830096D107 /* GBTemplateVariablesProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3C36D0137A4D820096D107 /* GBTemplateVariablesProvider.m */; };
+		9C3C36D9137A54230096D107 /* GBLatexTemplateVariablesProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3C36D8137A54220096D107 /* GBLatexTemplateVariablesProvider.m */; };
+		9C3C36DA137A54230096D107 /* GBLatexTemplateVariablesProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3C36D8137A54220096D107 /* GBLatexTemplateVariablesProvider.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -500,6 +502,8 @@
 		9C3C36CF137A4D820096D107 /* GBTemplateVariablesProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBTemplateVariablesProvider.h; sourceTree = "<group>"; };
 		9C3C36D0137A4D820096D107 /* GBTemplateVariablesProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBTemplateVariablesProvider.m; sourceTree = "<group>"; };
 		9C3C36D3137A50590096D107 /* GBTemplateVariablesProviderSubclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBTemplateVariablesProviderSubclass.h; sourceTree = "<group>"; };
+		9C3C36D7137A54220096D107 /* GBLatexTemplateVariablesProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBLatexTemplateVariablesProvider.h; sourceTree = "<group>"; };
+		9C3C36D8137A54220096D107 /* GBLatexTemplateVariablesProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBLatexTemplateVariablesProvider.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -721,6 +725,8 @@
 				7335F72D12E58E160094F72E /* GBDocSetPublishGenerator.m */,
 				9C3C36CB137A35670096D107 /* GBLatexOutputGenerator.h */,
 				9C3C36CC137A35670096D107 /* GBLatexOutputGenerator.m */,
+				9C3C36D7137A54220096D107 /* GBLatexTemplateVariablesProvider.h */,
+				9C3C36D8137A54220096D107 /* GBLatexTemplateVariablesProvider.m */,
 				7321D0E512944CF500796DEC /* GBTemplateHandler.h */,
 				7321D0E612944CF500796DEC /* GBTemplateHandler.m */,
 				73734616129668340046D6B8 /* GBDictionaryTemplateLoader.h */,
@@ -1270,6 +1276,7 @@
 				73E0CF46131047E700FAFEC0 /* GBCommentsProcessor-MarkdownTesting.m in Sources */,
 				9C3C36CE137A38A00096D107 /* GBLatexOutputGenerator.m in Sources */,
 				9C3C36D2137A4D830096D107 /* GBTemplateVariablesProvider.m in Sources */,
+				9C3C36DA137A54230096D107 /* GBLatexTemplateVariablesProvider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1354,6 +1361,7 @@
 				73C4C8611377DFF70024FA77 /* GBExitCodes.m in Sources */,
 				9C3C36CD137A35680096D107 /* GBLatexOutputGenerator.m in Sources */,
 				9C3C36D1137A4D830096D107 /* GBTemplateVariablesProvider.m in Sources */,
+				9C3C36D9137A54230096D107 /* GBLatexTemplateVariablesProvider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
