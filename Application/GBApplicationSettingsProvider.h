@@ -173,14 +173,25 @@ extern id kGBCustomDocumentIndexDescKey;
  If `YES`, HTML files are generated in `outputPath` from parsed and processed data. If `NO`, input files are parsed and processed, but nothing is generated.
  
  @see createDocSet
+ @see createLatex
  */
 @property (assign) BOOL createHTML;
+
+/** Indicates whether LaTeX files should be generated or not.
+ 
+ If `YES`, LaTeX files are generated in `outputPath` from parsed and processed data. If `NO`, input files are parsed and processed, but nothing is generated.
+ 
+ @see createHTML
+ @see createDocSet
+ */
+@property (assign) BOOL createLatex;
 
 /** Specifies whether documentation set should be created from the HTML files.
  
  If `YES`, HTML files from html subdirectory in `outputPath` are moved to proper subdirectory within docset output files, then helper files are generated from parsed data. Documentation set files are also indexed. If `NO`, HTML files are left in the output path.
  
  @see createHTML
+ @see createLatex
  @see installDocSet
  @see publishDocSet
  */

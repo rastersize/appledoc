@@ -32,6 +32,7 @@ static NSString *kGBArgCompanyIdentifier = @"company-id";
 
 static NSString *kGBArgCleanOutput = @"clean-output";
 static NSString *kGBArgCreateHTML = @"create-html";
+static NSString *kGBArgCreateLatex = @"create-latex";
 static NSString *kGBArgCreateDocSet = @"create-docset";
 static NSString *kGBArgInstallDocSet = @"install-docset";
 static NSString *kGBArgPublishDocSet = @"publish-docset";
@@ -251,10 +252,12 @@ static NSString *kGBArgHelp = @"help";
 		
 		{ kGBArgCleanOutput,												0,		DDGetoptNoArgument },
 		{ kGBArgCreateHTML,													'h',	DDGetoptNoArgument },
+		{ kGBArgCreateLatex,												'l',	DDGetoptNoArgument },
 		{ kGBArgCreateDocSet,												'd',	DDGetoptNoArgument },
 		{ kGBArgInstallDocSet,												'n',	DDGetoptNoArgument },
 		{ kGBArgPublishDocSet,												'u',	DDGetoptNoArgument },
 		{ GBNoArg(kGBArgCreateHTML),										0,		DDGetoptNoArgument },
+		{ GBNoArg(kGBArgCreateLatex),										0,		DDGetoptNoArgument },
 		{ GBNoArg(kGBArgCreateDocSet),										0,		DDGetoptNoArgument },
 		{ GBNoArg(kGBArgInstallDocSet),										0,		DDGetoptNoArgument },
 		{ GBNoArg(kGBArgPublishDocSet),										0,		DDGetoptNoArgument },
@@ -616,6 +619,9 @@ static NSString *kGBArgHelp = @"help";
 		self.settings.publishDocSet = NO;
 	}
 }
+- (void)setCreateLatex:(BOOL)value { 
+	self.settings.createLatex = value;
+}
 - (void)setCreateDocset:(BOOL)value { 
 	self.settings.createDocSet = value;
 	if (value) {
@@ -645,6 +651,7 @@ static NSString *kGBArgHelp = @"help";
 }
 - (void)setNoCleanOutput:(BOOL)value { self.settings.cleanupOutputPathBeforeRunning = !value; }
 - (void)setNoCreateHtml:(BOOL)value { [self setCreateHtml:!value]; }
+- (void)setNoCreateLatex:(BOOL)value { [self setCreateLatex:!value]; }
 - (void)setNoCreateDocset:(BOOL)value { [self setCreateDocset:!value]; }
 - (void)setNoInstallDocset:(BOOL)value { [self setInstallDocset:!value]; }
 - (void)setNoPublishDocset:(BOOL)value { [self setPublishDocset:!value]; }
@@ -770,6 +777,7 @@ static NSString *kGBArgHelp = @"help";
 	
 	ddprintf(@"--%@ = %@\n", kGBArgCleanOutput, PRINT_BOOL(self.settings.cleanupOutputPathBeforeRunning));
 	ddprintf(@"--%@ = %@\n", kGBArgCreateHTML, PRINT_BOOL(self.settings.createHTML));
+	ddprintf(@"--%@ = %@\n", kGBArgCreateLatex, PRINT_BOOL(self.settings.createLatex));
 	ddprintf(@"--%@ = %@\n", kGBArgCreateDocSet, PRINT_BOOL(self.settings.createDocSet));
 	ddprintf(@"--%@ = %@\n", kGBArgInstallDocSet, PRINT_BOOL(self.settings.installDocSet));
 	ddprintf(@"--%@ = %@\n", kGBArgPublishDocSet, PRINT_BOOL(self.settings.publishDocSet));
@@ -829,6 +837,7 @@ static NSString *kGBArgHelp = @"help";
 	ddprintf(@"\n");
 	ddprintf(@"OUTPUT GENERATION\n");
 	PRINT_USAGE(@"-h,", kGBArgCreateHTML, @"", @"[b] Create HTML");
+	PRINT_USAGE(@"-l,", kGBArgCreateLatex, @"", @"[b] Create LaTeX");
 	PRINT_USAGE(@"-d,", kGBArgCreateDocSet, @"", @"[b] Create documentation set");
 	PRINT_USAGE(@"-n,", kGBArgInstallDocSet, @"", @"[b] Install documentation set to Xcode");
 	PRINT_USAGE(@"-u,", kGBArgPublishDocSet, @"", @"[b] Prepare DocSet for publishing");
