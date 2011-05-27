@@ -34,6 +34,8 @@ NSString *kGBCustomDocumentIndexDescKey = @"index-description";
 - (NSString *)htmlReferenceForObjectFromIndex:(GBModelBase *)object;
 - (NSString *)htmlReferenceForTopLevelObject:(GBModelBase *)object fromTopLevelObject:(GBModelBase *)source;
 - (NSString *)htmlReferenceForMember:(id)member prefixedWith:(id)prefix;
+- (NSString *)latexReferenceForTopLevelObject:(GBModelBase *)object fromTopLevelObject:(GBModelBase *)source;
+- (NSString *)latexReferenceForMember:(id)member prefixedWith:(id)prefix;
 - (NSString *)outputPathForObject:(id)object withExtension:(NSString *)extension;
 - (NSString *)stringByReplacingOccurencesOfRegex:(NSString *)regex inHTML:(NSString *)string usingBlock:(NSString *(^)(NSInteger captureCount, NSString **capturedStrings, BOOL insideCode))block;
 - (NSString *)stringByNormalizingString:(NSString *)string;
@@ -73,6 +75,7 @@ NSString *kGBCustomDocumentIndexDescKey = @"index-description";
 		self.ignoredPaths = [NSMutableSet set];
 		
 		self.createHTML = YES;
+		self.createLatex = NO;
 		self.createDocSet = YES;
 		self.installDocSet = YES;
 		self.publishDocSet = NO;
@@ -247,6 +250,34 @@ NSString *kGBCustomDocumentIndexDescKey = @"index-description";
 	return result;
 }
 
+- (NSString *)stringByConvertingMarkdownToLatex:(NSString *)markdown
+{
+	NSString *plain = [self stringByConvertingMarkdownToText:markdown];
+	NSString *result = [self stringByEscapingLatex:plain];
+	
+	return result;
+}
+
+- (NSString *)stringByEscapingLatex:(NSString *)string {
+	NSMutableString *result = [NSMutableString stringWithCapacity:5 + ceilf(string.length * 1.1)];
+	[result appendString:string];
+	
+	// Replace characters which are special in LaTeX
+	[result replaceOccurrencesOfString:@"{" withString:@"\\{" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+	[result replaceOccurrencesOfString:@"}" withString:@"\\}" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+	[result replaceOccurrencesOfString:@"\\" withString:@"{\\textbackslash}" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+	[result replaceOccurrencesOfString:@"#" withString:@"\\#" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+	[result replaceOccurrencesOfString:@"&" withString:@"\\&" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+	[result replaceOccurrencesOfString:@"%" withString:@"\\%" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+	[result replaceOccurrencesOfString:@"$" withString:@"\\$" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+	[result replaceOccurrencesOfString:@"_" withString:@"\\_" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+	[result replaceOccurrencesOfString:@" LaTeX " withString:@" \\LaTeX " options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+	[result replaceOccurrencesOfString:@" TeX " withString:@" \\TeX " options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+	[result replaceOccurrencesOfString:@" LaTeXe " withString:@" \\LaTeXe " options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+	
+	return result;
+}
+
 - (NSString *)stringByEscapingHTML:(NSString *)string {
 	// Copied directly from GRMustache's GRMustacheVariableElement.m...
 	NSMutableString *result = [NSMutableString stringWithCapacity:5 + ceilf(string.length * 1.1)];
@@ -360,6 +391,95 @@ NSString *kGBCustomDocumentIndexDescKey = @"index-description";
 
 - (NSString *)htmlExtension {
 	return @"html";
+}
+
+#pragma mark Common LaTeX handling
+
+///---------------------------------------------------------------------------------------
+/// @name Application-wide LaTeX helpers
+///---------------------------------------------------------------------------------------
+
+- (NSString *)latexReferenceForObject:(GBModelBase *)object fromSource:(GBModelBase *)source {
+	NSParameterAssert(object != nil);
+	
+	// Generate hrefs from index to objects:
+	if (!source) {
+		// To top-level object.
+		if (object.isTopLevelObject) return [self latexReferenceForObjectFromIndex:object];
+		if (object.isStaticDocument) return [self latexReferenceForObjectFromIndex:object];
+		
+		// To a member of top-level object.
+		NSString *path = [self latexReferenceForObjectFromIndex:object.parentObject];
+		NSString *memberReference = [self latexReferenceForMember:object prefixedWith:@""];
+		return [NSString stringWithFormat:@"%@%@", path, memberReference];
+	}
+	
+	// Generate hrefs from members to other objects.
+	if (!source.isTopLevelObject && !source.isStaticDocument) {
+		GBModelBase *sourceParent = source.parentObject;
+		
+		// To the parent or another top-level object.
+		if (object.isTopLevelObject) return [self latexReferenceForObject:object fromSource:sourceParent];
+		if (object.isStaticDocument) return [self latexReferenceForObject:object fromSource:sourceParent];
+		
+		// To same or another member of the same parent.
+		if (object.parentObject == sourceParent) return [self latexReferenceForMember:object prefixedWith:@""];
+		
+		// To a member of another top-level object.
+		NSString *path = [self latexReferenceForObject:object.parentObject fromSource:sourceParent];
+		NSString *memberReference = [self latexReferenceForMember:object prefixedWith:@""];
+		return [NSString stringWithFormat:@"%@%@", path, memberReference];
+	}
+	
+	// From now on we're generating hrefs from top-level object or documents to other documents, top-level objects or their members. First handle links from any kind of object to itself and top-level object or document to top-level object. Handle links from document to document slighlty differently, they are more complicated due to arbitrary directory structure.
+	if (object == source || object.isTopLevelObject || object.isStaticDocument) return [self latexReferenceForTopLevelObject:object fromTopLevelObject:source];
+	
+	// From top-level object or document to top-level object member.
+	NSString *memberPath = [self latexReferenceForMember:object prefixedWith:@""];
+	if (object.parentObject != source) {
+		NSString *objectPath = [self latexReferenceForTopLevelObject:object.parentObject fromTopLevelObject:source];
+		return [NSString stringWithFormat:@"%@%@", objectPath, memberPath];
+	}
+	
+	// From top-level object to one of it's members.
+	return memberPath;
+}
+
+- (NSString *)latexReferenceForTopLevelObject:(id)object fromTopLevelObject:(id)source {
+	// Handles top-level object or document to top-level object or document.
+	NSString *path = [self outputPathForObject:object withExtension:[self latexExtension]];
+	if (object == source) return [path lastPathComponent];
+	NSString *prefix = [self relativePathToIndexFromObject:source];
+	return [prefix stringByAppendingPathComponent:path];
+}
+
+-  (NSString *)latexReferenceForMember:(id)member prefixedWith:(id)prefix {
+	NSParameterAssert(member != nil);
+	NSParameterAssert(prefix != nil);
+	if ([member isKindOfClass:[GBMethodData class]]) {
+		GBMethodData *method = (GBMethodData *)member;
+		return [NSString stringWithFormat:@"%@//api/name/%@", prefix, method.methodSelector];
+	}
+	return @"";
+}
+
+- (NSString *)latexReferenceNameForObject:(GBModelBase *)object {
+	NSParameterAssert(object != nil);
+	if (object.isTopLevelObject) return [self latexReferenceForObject:object fromSource:object];
+	if (object.isStaticDocument) return [self latexReferenceForObject:object fromSource:object];
+	return [self latexReferenceForMember:object prefixedWith:@""];
+}
+
+- (NSString *)latexReferenceForObjectFromIndex:(GBModelBase *)object {
+	return [self outputPathForObject:object withExtension:[self latexExtension]];
+}
+
+- (NSString *)latexStaticDocumentsSubpath {
+	return @"docs-latex";
+}
+
+- (NSString *)latexExtension {
+	return @"tex";
 }
 
 #pragma mark Common template files helpers
@@ -590,6 +710,7 @@ NSString *kGBCustomDocumentIndexDescKey = @"index-description";
 @synthesize embedAppledocBoldMarkersWhenProcessingMarkdown;
 
 @synthesize createHTML;
+@synthesize createLatex;
 @synthesize createDocSet;
 @synthesize installDocSet;
 @synthesize publishDocSet;

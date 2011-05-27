@@ -527,6 +527,66 @@ extern id kGBCustomDocumentIndexDescKey;
 @property (readonly) NSString *htmlExtension;
 
 ///---------------------------------------------------------------------------------------
+/// @name Application-wide LaTeX helpers
+///---------------------------------------------------------------------------------------
+
+/** Returns LaTeX reference name for the given object.
+ 
+ This should only be used for creating anchors that need to be referenced from other parts of the same LaTeX file. The method works for static documents, top-level objects as well as their members.
+ 
+ @param object The object for which to return reference name.
+ @return Returns the reference name of the object.
+ @exception NSException Thrown if the given object is `nil`.
+ @see latexReferenceForObject:fromSource:
+ @see latexReferenceForObjectFromIndex:
+ */
+- (NSString *)latexReferenceNameForObject:(GBModelBase *)object;
+
+/** Returns relative LaTeX reference to the given object from the context of the given source object.
+ 
+ This is useful for generating hrefs from one object LaTeX file to another. This is the swiss army knife king of a method for all hrefs generation. It works for any kind of links:
+ 
+ - Index to top-level object (if source is `nil`).
+ - Index to a member of a top-level object (if source is `nil`).
+ - Top-level object to same top-level object.
+ - Top-level object to a different top-level object.
+ - Top-level object to one of it's members.
+ - Member object to it's top-level object.
+ - Member object to another top-level object.
+ - Member object to another member of the same top-level object.
+ - Member object to a member of another top-level object.
+ 
+ @param object The object for which to generate the reference to.
+ @param source The source object from which to generate the reference from or `nil` for index to object reference.
+ @return Returns the reference string.
+ @exception NSException Thrown if object is `nil`.
+ @see htmlReferenceForObjectFromIndex:
+ @see htmlReferenceNameForObject:
+ */
+- (NSString *)latexReferenceForObject:(GBModelBase *)object fromSource:(GBModelBase *)source;
+
+/** Returns relative LaTeX reference to the given object from the context of index file.
+ 
+ This is simply a helper method for `latexReferenceForObject:fromSource:`, passing the given object as object parameter and `nil` as source.
+ 
+ @param object The object for which to generate the reference to.
+ @return Returns the reference string.
+ @exception NSException Thrown if object is `nil`.
+ @see latexRelativePathToIndexFromObject:
+ @see latexReferenceForObject:fromSource:
+ @see latexReferenceNameForObject:
+ */
+- (NSString *)latexReferenceForObjectFromIndex:(GBModelBase *)object;
+
+/** The subpath within `outputPath` where static LaTeX documents are stored.
+ */
+@property (readonly) NSString *latexStaticDocumentsSubpath;
+
+/** The file extension for LaTeX files.
+ */
+@property (readonly) NSString *latexExtension;
+
+///---------------------------------------------------------------------------------------
 /// @name Application-wide template files helpers
 ///---------------------------------------------------------------------------------------
 
