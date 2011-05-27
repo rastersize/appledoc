@@ -371,7 +371,7 @@ NSString *kGBCustomDocumentIndexDescKey = @"index-description";
 	// Handles top-level object or document to top-level object or document.
 	NSString *path = [self outputPathForObject:object withExtension:[self htmlExtension]];
 	if (object == source) return [path lastPathComponent];
-	NSString *prefix = [self htmlRelativePathToIndexFromObject:source];
+	NSString *prefix = [self relativePathToIndexFromObject:source];
 	return [prefix stringByAppendingPathComponent:path];
 }
 
@@ -586,7 +586,7 @@ NSString *kGBCustomDocumentIndexDescKey = @"index-description";
 	return [basePath stringByAppendingPathExtension:extension];
 }
 
-- (NSString *)htmlRelativePathToIndexFromObject:(id)object {
+- (NSString *)relativePathToIndexFromObject:(id)object {
 	// Returns relative path prefix from the given source to the given destination or empty string if both objects live in the same path. This is pretty simple except when object is a document. In such case we need to handle arbitrary depth.	
 	if ([object isStaticDocument]) {
 		NSString *subpath = [self outputPathForObject:object withExtension:@"extension"];

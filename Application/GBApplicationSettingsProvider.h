@@ -505,7 +505,7 @@ extern id kGBCustomDocumentIndexDescKey;
  */
 - (NSString *)htmlReferenceForObjectFromIndex:(GBModelBase *)object;
 
-/** Returns relative HTML path from the given object to the index file location.
+/** Returns relative path from the given object to the index file location.
  
  This is kind of reverse to `htmlReferenceForObjectFromIndex:`, except that it only returns the relative path, without index.html.
  
@@ -516,7 +516,7 @@ extern id kGBCustomDocumentIndexDescKey;
  @see htmlReferenceForObject:fromSource:
  @see htmlReferenceNameForObject:
  */
-- (NSString *)htmlRelativePathToIndexFromObject:(id)object;
+- (NSString *)relativePathToIndexFromObject:(id)object;
 
 /** The subpath within `outputPath` where static documents are stored.
  */

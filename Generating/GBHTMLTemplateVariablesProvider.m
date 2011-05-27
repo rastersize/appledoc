@@ -134,7 +134,7 @@
 
 - (NSDictionary *)variablesForDocument:(GBDocumentData *)object withStore:(id)store {
 	self.store = store;
-	NSString *path = [self.settings htmlRelativePathToIndexFromObject:object];
+	NSString *path = [self.settings relativePathToIndexFromObject:object];
 	NSMutableDictionary *page = [NSMutableDictionary dictionary];
 	[page setObject:[self pageTitleForDocument:object] forKey:@"title"];
 	[page setObject:[path stringByAppendingPathComponent:@"css/styles.css"] forKey:@"cssPath"];

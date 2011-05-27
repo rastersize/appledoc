@@ -722,7 +722,7 @@ typedef NSUInteger GBProcessingFlag;
 	// If this is copied comment, we need to prepare "universal" relative path even if used in local object. As the comment was copied to other objects, we don't know where it will point to, so we need to make it equally usable in the secondary object(s). Note that this code assumes copied comments can only be used for top-level objects so we simplify stuff a bit.
 	NSString *address = [self.settings htmlReferenceForObject:referencedObject fromSource:referencedObject.parentObject];
 	if (self.currentComment.isCopied) {
-		NSString *descendPath = [self.settings htmlRelativePathToIndexFromObject:referencedObject.parentObject];
+		NSString *descendPath = [self.settings relativePathToIndexFromObject:referencedObject.parentObject];
 		NSString *path = [self.settings htmlReferenceForObjectFromIndex:referencedObject.parentObject];
 		NSString *prefix = [descendPath stringByAppendingPathComponent:path];
 		address = [prefix stringByAppendingString:address];
